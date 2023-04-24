@@ -1,1 +1,9 @@
 # Photo-editor
+
+Photo editor app created in Python using Pillow library, but not only!  
+
+Authors: <br />
+[Michał Wasilewski](https://github.com/miwasil) <br />
+[Karol Sikora](https://github.com/kasikora)
+
+## About
