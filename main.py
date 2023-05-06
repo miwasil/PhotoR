@@ -2,44 +2,74 @@ from tkinter import X, BOTH, HORIZONTAL, ttk
 import customtkinter
 from customtkinter import filedialog
 from basicFuncs import BasicFuncs
+import tkinter as tk
+from tkinter import ttk
+from basicFuncs import BasicFuncs
 
-class Main(customtkinter.CTk):
+
+class Main(tk.Tk):
     def __init__(self):
-        customtkinter.CTk.__init__(self)
+        # setup
+        super().__init__()
+        self.title("Photo Editor v1.0")
+        self.geometry('1000x600')
+        self.minsize(1000, 600)
 
-        customtkinter.set_appearance_mode("dark")
-        customtkinter.set_default_color_theme("blue")
-        self.title("Photo Editor")
-
-#   dark-blue ??
-        self.filename = ""
-        self.original_image = None
-        self.processed_image = None
-        self.is_image_selected = False
-        self.is_draw_state = False
-        self.is_crop_state = False
-
-        self.filter_frame = None
-        self.adjust_frame = None
-        #self.editbar = EditBar(master=self)
-        separator1 = ttk.Separator(master=self, orient=HORIZONTAL)
-        self.image_viewer = BasicFuncs(master=self)
-
-        self.editbar.pack(pady=10)
-        separator1.pack(fill=X, padx=20, pady=5)
-        self.image_viewer.pack(fill=BOTH, padx=20, pady=10, expand=1)
+        # widgets
+        self.menu = Menu(self)
+        self.photoside = PhotoSide(self)
 
 
-        #file_path = ""
+class Menu(ttk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
+
+        self.save_button = None
+        self.open_button = None
+
+        self.place(x=0, y=0, relwidth=0.3, relheight=1)
+
+        self.create_buttons()
+        self.create_layout()
+    def create_buttons(self):
+        #creating elements
+        self.open_button = ttk.Button(self, text='Open')
+        #self.open_button = BasicFuncs(self)
+        self.save_button = ttk.Button(self, text='Save')
 
 
-      #  self.basics = BasicFuncs(master=root) # or self??
+    def create_layout(self):
+        #creating
+        self.columnconfigure((0,1,2), weight =1, uniform='a')
+        self.rowconfigure((0, 1, 2,3,4,5,6), weight=1, uniform='a')
+
+        #label = ttk.Label(self, background='#856ff8').pack(expand=True, fill='both')
+        #placing elements
+        self.open_button.grid(row = 0, column= 0, sticky='nswe')
+        self.save_button.grid(row =0, column =1, sticky='nswe')
 
 
-        # frame = customtkinter.CTkFrame(master=root)
-        # frame.pack(pady=20, padx=60, fill=" both", expand=True)
-        #
-        # label = customtkinter.CTkLabel(master=frame, text="test")
-        # label.pack(pady=12, padx=10)
+# class PhotoSide(ttk.Frame):
+#     def __init__(self, master):
+#         super().__init__(master)
+#
+#         self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
+#
+#         frame = ttk.Frame(self)
+#         label = ttk.Label(frame, background='#856ff8')
+#         label.pack(expand=True, fill='both')
+#         frame.pack(side='left', expand=True, fill='both', padx=20, pady=20)
+
+class PhotoSide(tk.Canvas):
+    def __init__(self, master):
+        super().__init__(master)
+        self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
+
+        canvas = tk.Canvas(self)
+        label = ttk.Label(canvas, background='#856ff8')
+        label.pack(expand=True, fill='both')
+        canvas.pack(side='left', expand=True, fill='both', padx=20, pady=20)
+
+
 
 
