@@ -1,8 +1,11 @@
-from PIL import Image
-from customtkinter import filedialog
+from tkinter import CENTER, ROUND, ttk #zamienic na CTKinter??
 
-class BasicFuncs():
-    def add_image(self):
-        global file_path
-        file_path = filedialog.askdirectory()
-        image = Image.open(file_path)
+from PIL import Image, ImageDraw, ImageTk
+from customtkinter import filedialog, CTkFrame, CTkCanvas
+import tkinter
+
+class BasicFuncs(ttk.Button):
+    def __init__(self):
+        super().__init__(master, text='Open')
+    def open_file(self):
+        filepath=""
