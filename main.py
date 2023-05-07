@@ -1,80 +1,47 @@
-from tkinter import X, BOTH, HORIZONTAL, ttk
-import customtkinter
-from customtkinter import filedialog
-from basicFuncs import BasicFuncs
 import tkinter as tk
+from tkinter import colorchooser, Scale, HORIZONTAL
+from PIL import Image, ImageOps, ImageTk, ImageFilter
 from tkinter import ttk
-from basicFuncs import BasicFuncs
-from PIL import Image, ImageTk
+from basicFuncs import open_image, draw
 
-class Main(tk.Tk):
-    def __init__(self):
-        # setup
-        super().__init__()
-        self.title("Photo Editor v1.0")
-        self.geometry('1000x600')
-        self.minsize(1000, 600)
+app = tk.Tk()
+app.geometry('1000x600')
+app.minsize(1000, 600)
+app.title('Photo Editor v1.0')
+app.config(bg='white')
 
-        # widgets
-        self.menu = Menu(self)
-        self.photoside = PhotoSide(self)
+file_path = ""
+pen_color = "black"
+pen_size = 5
 
+def change_color():
+    global pen_color
+    pen_color = colorchooser.askcolor(title='Select color')[1]
 
-class Menu(ttk.Frame):
-    def __init__(self, master):
-        super().__init__(master)
-
-        self.save_button = None
-        self.open_button = None
-
-        self.place(x=0, y=0, relwidth=0.3, relheight=1)
-
-        self.create_buttons()
-        self.create_layout()
-
-    def create_buttons(self):
-        #creating elements
-        self.open_button = ttk.Button(self, text='Open', command=add_image)
-        self.save_button = ttk.Button(self, text='Save', command=save_image)
-
-    def create_layout(self):
-        #creating
-        self.columnconfigure((0,1,2), weight =1, uniform='a')
-        self.rowconfigure((0, 1, 2,3,4,5,6), weight=1, uniform='a')
-
-        #label = ttk.Label(self, background='#856ff8').pack(expand=True, fill='both')
-        #placing elements
-        self.open_button.grid(row = 0, column= 0, sticky='nswe')
-        self.save_button.grid(row =0, column =1, sticky='nswe')
-
-class PhotoSide(tk.Canvas):
-    def __init__(self, master):
-        super().__init__(master)
-        self.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
-
-        self.canvas = tk.Canvas(self)
-        self.canvas.pack(side='left', expand=True, fill='both', padx=20, pady=20)
+def change_size(size):
+    global pen_size
+    pen_size = size
 
 
-def add_image():
-    global file_path
-    file_path = filedialog.askopenfilename()
-    image = Image.open(file_path)
-    width, height = int(image.width / 2), int(image.height / 2)
-    image = image.resize((width, height), Image.ANTIALIAS)
-    root.photoside.canvas.config(width=image.width, height=image.height)
-    image = ImageTk.PhotoImage(image)
-    root.photoside.canvas.image = image
-    root.photoside.canvas.create_image(0, 0, image=image, anchor='nw')
 
-def save_image():
-    global file_path
-    file_path = filedialog.asksaveasfilename(defaultextension='.jpg')
-    if not file_path:
-        return
-    image = Image.open(file_path)
-    root.photoside.canvas.postscript(file=file_path + '.eps')
-    image.save(file_path)
+menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
+menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to gdzies wlozyc
 
-root = Main()
-root.mainloop()
+open_button = tk.Button(menu, text='Open', command=lambda: open_image(canvas, file_path))
+save_button = tk.Button(menu, text='Save')
+color_button = tk.Button(menu, text='Change color of draw', command=change_color)
+pensizeSlider = Scale(menu, from_=1, to=10, orient=HORIZONTAL)
+
+open_button.pack(pady=5)
+save_button.pack(pady=5)
+color_button.pack(pady=5)
+pensizeSlider.pack(pady=5)
+
+
+canvas = tk.Canvas(app)
+canvas.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
+
+
+canvas.bind("<B1-Motion>", lambda event: draw(canvas, event, pen_size, pen_color))    #when u click and drag call draw function
+
+app.mainloop()  # zazwyczaj sie uzywa root albo master
