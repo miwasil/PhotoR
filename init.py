@@ -1,4 +1,5 @@
-from main import Main
-
-root = Main()
-root.mainloop()
+# from main import Main
+#
+#
+# root = Main()
+# root.mainloop()
