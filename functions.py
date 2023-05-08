@@ -1,8 +1,12 @@
 from PIL import Image, ImageOps, ImageEnhance, ImageFilter
 import numpy as np
+values = ('contrast', 'color', 'brightness', 'sharpness', 'boxblur', 'emboss', 'palette')
 
 def open_image(name):
     return Image.open(name)
+
+
+
 
 def rotate(image):
     return image.rotate(90, resample=Image.BICUBIC)
@@ -35,3 +39,7 @@ def emboss(image):
 
 def pallete(image):
     return image.convert('P', palette=Image.Palette.ADAPTIVE, colors=16)
+
+#def choose_filter(event):
+ #   for x in values:
+  #      if x == event.widget:
