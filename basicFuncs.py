@@ -6,9 +6,6 @@ from tkinter import ttk
 
 
 def open_image(canvas, image):
-    # global file_path
-    #file_path = filedialog.askopenfilename()
-    #image = Image.open(file_path)
     image = image.resize((700, 600))
     canvas.config(width=image.width, height=image.height)
     image = ImageTk.PhotoImage(image)

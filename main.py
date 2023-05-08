@@ -15,6 +15,7 @@ pen_size = 5
 
 canvas = None
 
+
 def change_color():
     global pen_color
     pen_color = colorchooser.askcolor(title='Select color')[1]
@@ -23,6 +24,7 @@ def change_color():
 def change_size(size):
     global pen_size
     pen_size = size
+
 
 def displayimage(image):
     dispimage = ImageTk.PhotoImage(image)
@@ -35,6 +37,7 @@ def blurr():
     image = image.filter(ImageFilter.BLUR)
     displayimage(image)
 
+
 def changeImg():
     global image
     imgname = filedialog.askopenfilename()
@@ -42,6 +45,7 @@ def changeImg():
         image = Image.open(imgname)
         image = image.resize((700, 600))
         displayimage(image)
+
 
 def save():
     global image
@@ -59,17 +63,14 @@ def brightness(factor):
 
 def contrast(factor):
     factor = float(factor)
-    #print(contrast_pos)
     global outputImage
     enhancer = ImageEnhance.Contrast(image)
     outputImage = enhancer.enhance(factor)
     displayimage(outputImage)
 
 
-
 def sharpen(factor):
     factor = float(factor)
-    #print(sharpness_pos)
     global outputImage
     enhancer = ImageEnhance.Sharpness(image)
     outputImage = enhancer.enhance(factor)
@@ -78,7 +79,6 @@ def sharpen(factor):
 
 def color(factor):
     factor = float(factor)
-    #print(Color_pos)
     global outputImage
     enhancer = ImageEnhance.Color(image)
     outputImage = enhancer.enhance(factor)
@@ -90,10 +90,10 @@ def create_canvas():
     canvas = tk.Canvas(photoside, bg='white')
     canvas.grid(row=0, column=0, padx=5, pady=5)
     canvas.bind("<B1-Motion>", lambda event: draw(canvas, event, pen_size, pen_color))
-    canvas.bind("<Button-1>", lambda event: draw(canvas, event, pen_size, pen_color))
     pensizeSlider.config(state='normal')
     color_button.config(state='normal')
     open_image(canvas, image)
+
 
 menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
 menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to gdzies wlozyc
@@ -106,11 +106,12 @@ open_button2 = tk.Button(menu, text='Open2', command=changeImg)
 blurr_button = tk.Button(menu, text='Blurr', command=blurr)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
 
-pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL, command=lambda val: change_size(pensizeSlider.get()))
+pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL,
+                      command=lambda val: change_size(pensizeSlider.get()))
 brightnessSlider = Scale(menu, label="Brightness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=brightness)
 contrastSlider = Scale(menu, label="Contrast", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=contrast)
 sharpnessSlider = Scale(menu, label="Sharpness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=sharpen)
-colorSlider = Scale(menu,  label="Color", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
+colorSlider = Scale(menu, label="Color", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
 
 clear_dr_button = tk.Button(menu, text='Clear drawing', bg='pink', command=lambda: clear_drawing(canvas))
 clear_all_button = tk.Button(menu, text='Destroy image', bg='pink', command=lambda: clear_all(canvas))
@@ -145,12 +146,6 @@ image = image.resize((700, 600))
 imageTK = ImageTk.PhotoImage(image)
 Label(photoside, image=imageTK).grid(row=0, column=0, padx=5, pady=5)
 
-if canvas is None:
-    pass
-else:
-    canvas.bind("<B1-Motion>",
-            lambda event: draw(canvas, event, pen_size, pen_color))  # when u click and drag call draw function
-
 filter_combobox.bind("<<ComboboxSelected>>")
 
-app.mainloop()  # zazwyczaj sie uzywa root albo master
+app.mainloop()
