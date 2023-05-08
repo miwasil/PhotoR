@@ -1,12 +1,11 @@
 import tkinter as tk
 from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label
-
 from basicFuncs import open_image, draw, clear_drawing, clear_all
-from PIL import Image, ImageTk, ImageFilter
+from PIL import Image, ImageTk, ImageEnhance, ImageFilter
 
 app = tk.Tk()
 app.geometry('1000x600')
-app.minsize(1000, 600)
+app.minsize(1000, 800)
 app.title('Photo Editor v1.0')
 app.config(bg='white')
 
@@ -43,6 +42,50 @@ def changeImg():
         image = image.resize((700, 600))
         displayimage(image)
 
+def save():
+    global image
+    savefile = filedialog.asksaveasfile(defaultextension=".jpg")
+    outputImage.save(savefile)
+
+
+def brightness(factor):
+    factor = float(factor)
+    global outputImage
+    enhancer = ImageEnhance.Brightness(image)
+    outputImage = enhancer.enhance(factor)
+    displayimage(outputImage)
+
+
+def contrast(factor):
+    factor = float(factor)
+    #print(contrast_pos)
+    global outputImage
+    enhancer = ImageEnhance.Contrast(image)
+    outputImage = enhancer.enhance(factor)
+    displayimage(outputImage)
+
+
+
+def sharpen(factor):
+    factor = float(factor)
+    #print(sharpness_pos)
+    global outputImage
+    enhancer = ImageEnhance.Sharpness(image)
+    outputImage = enhancer.enhance(factor)
+    displayimage(outputImage)
+
+
+def color(factor):
+    factor = float(factor)
+    #print(Color_pos)
+    global outputImage
+    enhancer = ImageEnhance.Color(image)
+    outputImage = enhancer.enhance(factor)
+    displayimage(outputImage)
+
+
+
+
 
 menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
 menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to gdzies wlozyc
@@ -50,39 +93,49 @@ menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to 
 photoside = tk.Frame(app, bg='yellow')
 photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
-
-
-# image = Image.open("quebonafide-egzotykajpg.jpg")
-# width, height = int(image.width / 2), int(image.height / 2)
-# image = image.resize((width, height), Image.LANCZOS)
-# imageTK = ImageTk.PhotoImage(image)
-# Label(photoside, image=imageTK).grid(row=0, column=0, padx=5, pady=5)
-
-
-
 open_button = tk.Button(menu, text='Open to draw', command=lambda: open_image(canvas))
 open_button2 = tk.Button(menu, text='Open2', command=changeImg)
 blurr_button = tk.Button(menu, text='Blurr', command=blurr)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
-pensizeSlider = Scale(menu, from_=1, to=10, orient=HORIZONTAL, command=lambda val: change_size(pensizeSlider.get()))
+
+pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL, command=lambda val: change_size(pensizeSlider.get()))
+brightnessSlider = Scale(menu, label="Brightness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=brightness)
+contrastSlider = Scale(menu, label="Contrast", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=contrast)
+sharpnessSlider = Scale(menu, label="Sharpness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=sharpen)
+colorSlider = Scale(menu,  label="Color", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
 
 clear_dr_button = tk.Button(menu, text='Clear drawing', bg='pink', command=lambda: clear_drawing(canvas))
 clear_all_button = tk.Button(menu, text='Destroy image', bg='pink', command=lambda: clear_all(canvas))
+save_button = tk.Button(menu, text='Save', command=save)
 
 filter_label = tk.Label(menu, text="Select filter")
 filter_combobox = ttk.Combobox(menu, values=["Emboss", "Blur"])
 
 pensizeSlider.set(5)
+brightnessSlider.set(1)
+contrastSlider.set(1)
+sharpnessSlider.set(1)
+colorSlider.set(1)
 
 open_button.pack(pady=5)
 open_button2.pack(pady=5)
 blurr_button.pack(pady=5)
 color_button.pack(pady=5)
 pensizeSlider.pack(pady=5)
-filter_label.pack(pady=5)
-filter_combobox.pack(pady=5)
+filter_label.pack()
+filter_combobox.pack()
+brightnessSlider.pack(pady=2)
+contrastSlider.pack(pady=2)
+sharpnessSlider.pack(pady=2)
+colorSlider.pack(pady=2)
 clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
+save_button.pack(pady=5)
+
+image = Image.open("quebonafide-egzotykajpg.jpg")
+image = image.resize((700, 600))
+imageTK = ImageTk.PhotoImage(image)
+Label(photoside, image=imageTK).grid(row=0, column=0, padx=5, pady=5)
 
 # canvas = tk.Canvas(app)
 # canvas.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
