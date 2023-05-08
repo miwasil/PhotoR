@@ -143,7 +143,7 @@ edit_photo_frame.pack(side=tk.BOTTOM)
 menubar = tk.Menu(menu)
 filemenu = tk.Menu(menubar, tearoff=0)
 filemenu.add_command(label="Open", command=changeImg)
-filemenu.add_command(label="Save")
+filemenu.add_command(label="Save", command=save)
 filemenu.add_command(label="Draw", command=create_canvas)
 menubar.add_cascade(label="File", menu=filemenu)
 
@@ -170,7 +170,7 @@ colorSlider = Scale(menu, label="Color", from_=0, to=2, resolution=0.1, orient=H
 
 clear_dr_button = tk.Button(menu, text='Clear drawing', bg='pink', command=lambda: clear_drawing(canvas))
 clear_all_button = tk.Button(menu, text='Go back to original', bg='pink', command=go_back, width=20)
-save_button = tk.Button(menu, text='Save', command=save)
+#save_button = tk.Button(menu, text='Save', command=save)
 
 
 
@@ -206,11 +206,11 @@ colorSlider.pack(pady=2)
 apply4_button.pack()
 clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
-save_button.pack(pady=5)
+#save_button.pack(pady=5)
 
 
 
-image = Image.open("quebonafide-egzotykajpg.jpg")
+image = Image.open("dc.png")
 image = image.resize((700, 600))
 imageTK = ImageTk.PhotoImage(image)
 initial_photo = image.resize((200,100))
