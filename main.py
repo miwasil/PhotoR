@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label
+from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label, Entry
 from basicFuncs import draw, clear_drawing, clear_all, open_image
 from PIL import Image, ImageTk, ImageEnhance, ImageFilter
 
@@ -12,8 +12,6 @@ app.config(bg='white')
 file_path = ""
 pen_color = "black"
 pen_size = 5
-
-canvas = None
 
 
 def change_color():
@@ -88,11 +86,25 @@ def color(factor):
 def create_canvas():
     global canvas
     canvas = tk.Canvas(photoside, bg='white')
-    canvas.grid(row=0, column=0, padx=5, pady=5)
+    canvas.grid(row=0, column=0)
     canvas.bind("<B1-Motion>", lambda event: draw(canvas, event, pen_size, pen_color))
     pensizeSlider.config(state='normal')
     color_button.config(state='normal')
     open_image(canvas, image)
+
+def temp_text(e):
+    resize_entry.delete(0, "end")
+
+def resize(entry):
+    global image
+    size = entry.get()
+    if 'x' in size:
+        width, height = map(int, size.split('x'))
+        image = image.resize((width, height))
+        displayimage(image)
+    else:
+        pass
+    displayimage(image)
 
 
 menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
@@ -103,6 +115,9 @@ photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
 open_button = tk.Button(menu, text='Open to draw', command=create_canvas)
 open_button2 = tk.Button(menu, text='Open2', command=changeImg)
+resize_entry = Entry(menu, width=30)
+resize_entry.insert(0, "Provide with format 0000x0000")
+resize_button = tk.Button(menu, text='Resize', command=lambda: resize(resize_entry))
 blurr_button = tk.Button(menu, text='Blurr', command=blurr)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
 
@@ -128,6 +143,8 @@ colorSlider.set(1)
 
 open_button.pack(pady=5)
 open_button2.pack(pady=5)
+resize_entry.pack(pady=5)
+resize_button.pack(pady=5)
 blurr_button.pack(pady=5)
 color_button.pack(pady=5)
 pensizeSlider.pack(pady=5)
@@ -144,8 +161,10 @@ save_button.pack(pady=5)
 image = Image.open("quebonafide-egzotykajpg.jpg")
 image = image.resize((700, 600))
 imageTK = ImageTk.PhotoImage(image)
-Label(photoside, image=imageTK).grid(row=0, column=0, padx=5, pady=5)
+Label(photoside, image=imageTK).grid(row=0, column=0)
 
 filter_combobox.bind("<<ComboboxSelected>>")
+
+resize_entry.bind("<FocusIn>", temp_text)
 
 app.mainloop()

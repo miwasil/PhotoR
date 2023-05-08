@@ -1,8 +1,5 @@
-import tkinter as tk
-from tkinter import filedialog, Label
-from tkinter import colorchooser
 from PIL import Image, ImageOps, ImageTk, ImageFilter
-from tkinter import ttk
+
 
 
 def open_image(canvas, image):
@@ -16,7 +13,7 @@ def open_image(canvas, image):
 def draw(canvas, event, pen_size, pen_color):
     x1, y1 = (event.x - pen_size), (event.y - pen_size)
     x2, y2 = (event.x + pen_size), (event.y + pen_size)
-    canvas.create_oval(x1, y1, x2, y2, fill=pen_color, outline='')  # rysujemy wiele owali
+    canvas.create_oval(x1, y1, x2, y2, fill=pen_color, outline='')
 
 
 def clear_drawing(canvas):
