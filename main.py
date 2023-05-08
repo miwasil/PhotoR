@@ -29,6 +29,15 @@ def displayimage(image):
     Label(photoside, image=dispimage).grid(row=0, column=0, padx=5, pady=5)
     photoside.image = dispimage
 
+def rotate():
+    global image
+    image = image.rotate(90)
+    displayimage(image)
+
+def flip_horizontal():
+    global image
+    image = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+    displayimage(image)
 
 def blurr():
     global image
@@ -37,13 +46,17 @@ def blurr():
 
 
 def changeImg():
-    global image
+    global image, initial_photo
     imgname = filedialog.askopenfilename()
     if imgname:
         image = Image.open(imgname)
         image = image.resize((700, 600))
         displayimage(image)
-
+        initial_photo = image
+        initial_photo = image.resize((200, 100))
+        initial_photo_TK = ImageTk.PhotoImage(initial_photo)
+        Label(edit_photo_frame, image=initial_photo_TK).grid(row=0, column=0)
+        edit_photo_frame.image = initial_photo_TK
 
 def save():
     global image
@@ -59,11 +72,13 @@ def brightness(factor):
     displayimage(outputImage)
 
 
+
 def contrast(factor):
     factor = float(factor)
     global outputImage
     enhancer = ImageEnhance.Contrast(image)
     outputImage = enhancer.enhance(factor)
+    displayimage(image)
     displayimage(outputImage)
 
 
@@ -120,16 +135,25 @@ menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to 
 photoside = tk.Frame(app, bg='yellow')
 photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
+edit_photo_frame = tk.Frame(menu)
+edit_photo_frame.pack(side=tk.BOTTOM)
 
+menubar = tk.Menu(menu)
+filemenu = tk.Menu(menubar, tearoff=0)
+filemenu.add_command(label="Open", command=changeImg)
+filemenu.add_command(label="Save")
+filemenu.add_command(label="Draw", command=create_canvas)
+menubar.add_cascade(label="File", menu=filemenu)
 
-
-open_button = tk.Button(menu, text='Open to draw', command=create_canvas)
-open_button2 = tk.Button(menu, text='Open2', command=changeImg)
+#open_button = tk.Button(menu, text='Open to draw', command=create_canvas)
+#open_button2 = tk.Button(menu, text='Open2', command=changeImg)
 resize_entry = Entry(menu, width=30)
 resize_entry.insert(0, "Provide with format 0000x0000")
 resize_button = tk.Button(menu, text='Resize', command=lambda: resize(resize_entry))
 blurr_button = tk.Button(menu, text='Blurr', command=blurr)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
+rotate_button = tk.Button(menu, text='Rotate', command=rotate)
+flip_horizontal_button = tk.Button(menu, text='Flip Horizontal', command=flip_horizontal)
 
 pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL,
                       command=lambda val: change_size(pensizeSlider.get()))
@@ -157,12 +181,14 @@ colorSlider.set(1)
 
 
 
-open_button.pack(pady=5)
-open_button2.pack(pady=5)
+#open_button.pack(pady=5)
+#open_button2.pack(pady=5)
 resize_entry.pack(pady=5)
 resize_button.pack(pady=5)
 blurr_button.pack(pady=5)
 color_button.pack(pady=5)
+rotate_button.pack(pady=5)
+flip_horizontal_button.pack(pady=5)
 pensizeSlider.pack(pady=5)
 filter_label.pack()
 filter_combobox.pack()
@@ -176,16 +202,20 @@ save_button.pack(pady=5)
 
 
 
-image = Image.open("quebonafide-egzotykajpg.jpg")
+image = Image.open("dc.png")
 image = image.resize((700, 600))
 imageTK = ImageTk.PhotoImage(image)
+initial_photo = image.resize((200,100))
+initial_photo_TK = ImageTk.PhotoImage(initial_photo)
 Label(photoside, image=imageTK).grid(row=0, column=0)
+Label(edit_photo_frame, image=initial_photo_TK).grid(row=0, column=0)
 original_image = image
 
 filter_combobox.bind("<<ComboboxSelected>>")
 
 resize_entry.bind("<FocusIn>", temp_text)
 
-
-
+app.config(menu=menubar)
 app.mainloop()
+
+
