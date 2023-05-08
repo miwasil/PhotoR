@@ -35,6 +35,7 @@ clear_dr_button = tk.Button(menu, text='Clear drawing', bg='pink', command=lambd
 clear_all_button = tk.Button(menu, text='Destroy image', bg='pink', command=lambda: clear_all(canvas))
 
 filter_label = tk.Label(menu, text="Select filter")
+filter_combobox = ttk.Combobox(menu, values=["Emboss", "Blur"])
 
 pensizeSlider.set(5)
 
@@ -43,6 +44,7 @@ save_button.pack(pady=5)
 color_button.pack(pady=5)
 pensizeSlider.pack(pady=5)
 filter_label.pack(pady=5)
+filter_combobox.pack(pady=5)
 clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
 
@@ -51,5 +53,7 @@ canvas.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
 canvas.bind("<B1-Motion>",
             lambda event: draw(canvas, event, pen_size, pen_color))  # when u click and drag call draw function
+
+filter_combobox.bind("<<ComboboxSelected>>")
 
 app.mainloop()  # zazwyczaj sie uzywa root albo master
