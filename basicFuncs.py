@@ -5,12 +5,11 @@ from PIL import Image, ImageOps, ImageTk, ImageFilter
 from tkinter import ttk
 
 
-def open_image(canvas):
+def open_image(canvas, image):
     # global file_path
-    file_path = filedialog.askopenfilename()
-    image = Image.open(file_path)
-    width, height = int(image.width / 2), int(image.height / 2)
-    image = image.resize((width, height), Image.ANTIALIAS)
+    #file_path = filedialog.askopenfilename()
+    #image = Image.open(file_path)
+    image = image.resize((700, 600))
     canvas.config(width=image.width, height=image.height)
     image = ImageTk.PhotoImage(image)
     canvas.image = image

@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label
-from basicFuncs import open_image, draw, clear_drawing, clear_all
+from basicFuncs import draw, clear_drawing, clear_all, open_image
 from PIL import Image, ImageTk, ImageEnhance, ImageFilter
 
 app = tk.Tk()
@@ -13,6 +13,7 @@ file_path = ""
 pen_color = "black"
 pen_size = 5
 
+canvas = None
 
 def change_color():
     global pen_color
@@ -84,8 +85,15 @@ def color(factor):
     displayimage(outputImage)
 
 
-
-
+def create_canvas():
+    global canvas
+    canvas = tk.Canvas(photoside, bg='white')
+    canvas.grid(row=0, column=0, padx=5, pady=5)
+    canvas.bind("<B1-Motion>", lambda event: draw(canvas, event, pen_size, pen_color))
+    canvas.bind("<Button-1>", lambda event: draw(canvas, event, pen_size, pen_color))
+    pensizeSlider.config(state='normal')
+    color_button.config(state='normal')
+    open_image(canvas, image)
 
 menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
 menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to gdzies wlozyc
@@ -93,7 +101,7 @@ menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to 
 photoside = tk.Frame(app, bg='yellow')
 photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
-open_button = tk.Button(menu, text='Open to draw', command=lambda: open_image(canvas))
+open_button = tk.Button(menu, text='Open to draw', command=create_canvas)
 open_button2 = tk.Button(menu, text='Open2', command=changeImg)
 blurr_button = tk.Button(menu, text='Blurr', command=blurr)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
@@ -137,11 +145,11 @@ image = image.resize((700, 600))
 imageTK = ImageTk.PhotoImage(image)
 Label(photoside, image=imageTK).grid(row=0, column=0, padx=5, pady=5)
 
-# canvas = tk.Canvas(app)
-# canvas.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
-#
-# canvas.bind("<B1-Motion>",
-#             lambda event: draw(canvas, event, pen_size, pen_color))  # when u click and drag call draw function
+if canvas is None:
+    pass
+else:
+    canvas.bind("<B1-Motion>",
+            lambda event: draw(canvas, event, pen_size, pen_color))  # when u click and drag call draw function
 
 filter_combobox.bind("<<ComboboxSelected>>")
 
