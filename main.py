@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import colorchooser, Scale, HORIZONTAL, ttk
 from basicFuncs import open_image, draw, clear_drawing, clear_all
-#from functions import choose_filter
+
 app = tk.Tk()
 app.geometry('1000x600')
 app.minsize(1000, 600)
@@ -36,24 +36,13 @@ clear_all_button = tk.Button(menu, text='Destroy image', bg='pink', command=lamb
 
 filter_label = tk.Label(menu, text="Select filter")
 
-########################################################
-current_var = tk.StringVar()
-filter_combobox = ttk.Combobox(menu, textvariable= current_var )
-filter_combobox['values'] = ('contrast', 'color', 'brightness', 'sharpness', 'boxblur', 'emboss', 'palette')
-filter_combobox['state'] = 'readonly'
-filter_combobox.set('Select filter')
-#filter_combobox.bind("<<ComboboxSelected>>", choose_filter)
-
-####################################################################3
 pensizeSlider.set(5)
-
 
 open_button.pack(pady=5)
 save_button.pack(pady=5)
 color_button.pack(pady=5)
 pensizeSlider.pack(pady=5)
 filter_label.pack(pady=5)
-filter_combobox.pack(pady=5)
 clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
 

@@ -5,7 +5,7 @@ from PIL import Image, ImageOps, ImageTk, ImageFilter
 from tkinter import ttk
 
 
-def open_image(canvas, file_path):
+def open_image(canvas):
     # global file_path
     file_path = filedialog.askopenfilename()
     image = Image.open(file_path)
@@ -30,3 +30,5 @@ def clear_drawing(canvas):
 
 def clear_all(canvas):
     canvas.delete('all')
+
+
