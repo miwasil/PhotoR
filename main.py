@@ -37,11 +37,12 @@ def blurr():
 
 
 def changeImg():
-    global image
+    global image, original_image
     imgname = filedialog.askopenfilename()
     if imgname:
         image = Image.open(imgname)
         image = image.resize((700, 600))
+        original_image = image
         displayimage(image)
 
 
@@ -100,6 +101,7 @@ def resize(entry):
     size = entry.get()
     if 'x' in size:
         width, height = map(int, size.split('x'))
+        x, y = width, height
         image = image.resize((width, height))
         displayimage(image)
     else:
@@ -110,8 +112,6 @@ def go_back():
     global image, original_image
     image = original_image
     displayimage(image)
-
-
 
 
 menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
@@ -130,6 +130,10 @@ resize_entry.insert(0, "Provide with format 0000x0000")
 resize_button = tk.Button(menu, text='Resize', command=lambda: resize(resize_entry))
 blurr_button = tk.Button(menu, text='Blurr', command=blurr)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
+apply1_button = tk.Button(menu, text='Apply')
+apply2_button = tk.Button(menu, text='Apply')
+apply3_button = tk.Button(menu, text='Apply')
+apply4_button = tk.Button(menu, text='Apply')
 
 pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL,
                       command=lambda val: change_size(pensizeSlider.get()))
@@ -167,9 +171,13 @@ pensizeSlider.pack(pady=5)
 filter_label.pack()
 filter_combobox.pack()
 brightnessSlider.pack(pady=2)
+apply1_button.pack()
 contrastSlider.pack(pady=2)
+apply2_button.pack()
 sharpnessSlider.pack(pady=2)
+apply3_button.pack()
 colorSlider.pack(pady=2)
+apply4_button.pack()
 clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
 save_button.pack(pady=5)
