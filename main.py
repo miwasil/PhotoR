@@ -1,9 +1,8 @@
 import tkinter as tk
-from tkinter import colorchooser, Scale, HORIZONTAL, ttk
-from typing import io
+from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label
 
 from basicFuncs import open_image, draw, clear_drawing, clear_all
-from PIL import Image
+from PIL import Image, ImageTk, ImageFilter
 
 app = tk.Tk()
 app.geometry('1000x600')
@@ -25,25 +24,45 @@ def change_size(size):
     global pen_size
     pen_size = size
 
-def save_image():
-    global file_path
-    if file_path:
-        # Get the PostScript representation of the canvas
-        ps = canvas.postscript(colormode='color')
+def displayimage(image):
+    dispimage = ImageTk.PhotoImage(image)
+    photoside.configure(image=dispimage)
+    photoside.image = dispimage
 
-        # Use PIL to convert the PostScript to an image
 
-        img = Image.open(io.BytesIO(ps.encode('utf-8')))
-        img.save(file_path)
-        print("Image saved!")
-    else:
-        print("Please open an image first.")
+def blurr():
+    global image
+    image = image.filter(ImageFilter.BLUR)
+    displayimage(image)
+
+def changeImg():
+    global image
+    imgname = filedialog.askopenfilename(title="Change Image")
+    if imgname:
+        image = Image.open(imgname)
+        image = image.resize((600, 600))
+        displayimage(image)
+
 
 menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
 menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to gdzies wlozyc
 
-open_button = tk.Button(menu, text='Open', command=lambda: open_image(canvas))
-save_button = tk.Button(menu, text='Save', command=save_image)
+photoside = tk.Frame(app, bg='yellow')
+photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
+
+
+
+image = Image.open("quebonafide-egzotykajpg.jpg")
+width, height = int(image.width / 2), int(image.height / 2)
+image = image.resize((width, height), Image.LANCZOS)
+imageTK = ImageTk.PhotoImage(image)
+Label(photoside, image=imageTK).grid(row=0, column=0, padx=5, pady=5)
+
+
+
+open_button = tk.Button(menu, text='Open to draw', command=lambda: open_image(canvas))
+open_button2 = tk.Button(menu, text='Open2', command=changeImg)
+blurr_button = tk.Button(menu, text='Blurr', command=blurr)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
 pensizeSlider = Scale(menu, from_=1, to=10, orient=HORIZONTAL, command=lambda val: change_size(pensizeSlider.get()))
 
@@ -56,7 +75,8 @@ filter_combobox = ttk.Combobox(menu, values=["Emboss", "Blur"])
 pensizeSlider.set(5)
 
 open_button.pack(pady=5)
-save_button.pack(pady=5)
+open_button2.pack(pady=5)
+blurr_button.pack(pady=5)
 color_button.pack(pady=5)
 pensizeSlider.pack(pady=5)
 filter_label.pack(pady=5)
@@ -64,11 +84,11 @@ filter_combobox.pack(pady=5)
 clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
 
-canvas = tk.Canvas(app)
-canvas.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
-
-canvas.bind("<B1-Motion>",
-            lambda event: draw(canvas, event, pen_size, pen_color))  # when u click and drag call draw function
+# canvas = tk.Canvas(app)
+# canvas.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
+#
+# canvas.bind("<B1-Motion>",
+#             lambda event: draw(canvas, event, pen_size, pen_color))  # when u click and drag call draw function
 
 filter_combobox.bind("<<ComboboxSelected>>")
 
