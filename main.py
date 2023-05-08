@@ -46,11 +46,13 @@ def blurr():
 
 
 def changeImg():
-    global image, initial_photo
+    global image, initial_photo, original_image
+
     imgname = filedialog.askopenfilename()
     if imgname:
         image = Image.open(imgname)
         image = image.resize((700, 600))
+        original_image = image
         displayimage(image)
         initial_photo = image
         initial_photo = image.resize((200, 100))
@@ -154,6 +156,10 @@ blurr_button = tk.Button(menu, text='Blurr', command=blurr)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
 rotate_button = tk.Button(menu, text='Rotate', command=rotate)
 flip_horizontal_button = tk.Button(menu, text='Flip Horizontal', command=flip_horizontal)
+apply1_button = tk.Button(menu, text='Apply')
+apply2_button = tk.Button(menu, text='Apply')
+apply3_button = tk.Button(menu, text='Apply')
+apply4_button = tk.Button(menu, text='Apply')
 
 pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL,
                       command=lambda val: change_size(pensizeSlider.get()))
@@ -195,14 +201,16 @@ filter_combobox.pack()
 brightnessSlider.pack(pady=2)
 contrastSlider.pack(pady=2)
 sharpnessSlider.pack(pady=2)
+apply3_button.pack()
 colorSlider.pack(pady=2)
+apply4_button.pack()
 clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
 save_button.pack(pady=5)
 
 
 
-image = Image.open("dc.png")
+image = Image.open("quebonafide-egzotykajpg.jpg")
 image = image.resize((700, 600))
 imageTK = ImageTk.PhotoImage(image)
 initial_photo = image.resize((200,100))
@@ -217,5 +225,3 @@ resize_entry.bind("<FocusIn>", temp_text)
 
 app.config(menu=menubar)
 app.mainloop()
-
-
