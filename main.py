@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import colorchooser, Scale, HORIZONTAL, ttk
+from typing import io
+
 from basicFuncs import open_image, draw, clear_drawing, clear_all
+from PIL import Image
 
 app = tk.Tk()
 app.geometry('1000x600')
@@ -22,12 +25,25 @@ def change_size(size):
     global pen_size
     pen_size = size
 
+def save_image():
+    global file_path
+    if file_path:
+        # Get the PostScript representation of the canvas
+        ps = canvas.postscript(colormode='color')
+
+        # Use PIL to convert the PostScript to an image
+
+        img = Image.open(io.BytesIO(ps.encode('utf-8')))
+        img.save(file_path)
+        print("Image saved!")
+    else:
+        print("Please open an image first.")
 
 menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
 menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to gdzies wlozyc
 
-open_button = tk.Button(menu, text='Open', command=lambda: open_image(canvas, file_path))
-save_button = tk.Button(menu, text='Save')
+open_button = tk.Button(menu, text='Open', command=lambda: open_image(canvas))
+save_button = tk.Button(menu, text='Save', command=save_image)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
 pensizeSlider = Scale(menu, from_=1, to=10, orient=HORIZONTAL, command=lambda val: change_size(pensizeSlider.get()))
 
