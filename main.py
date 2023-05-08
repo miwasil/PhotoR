@@ -96,15 +96,23 @@ def temp_text(e):
     resize_entry.delete(0, "end")
 
 def resize(entry):
-    global image
+    global image, original_image
     size = entry.get()
     if 'x' in size:
         width, height = map(int, size.split('x'))
         image = image.resize((width, height))
+        original_image = image
         displayimage(image)
     else:
         pass
     displayimage(image)
+
+def go_back():
+    global image, original_image
+    image = original_image
+    displayimage(image)
+
+
 
 
 menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
@@ -112,6 +120,9 @@ menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to 
 
 photoside = tk.Frame(app, bg='yellow')
 photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
+
+
+
 
 open_button = tk.Button(menu, text='Open to draw', command=create_canvas)
 open_button2 = tk.Button(menu, text='Open2', command=changeImg)
@@ -129,17 +140,23 @@ sharpnessSlider = Scale(menu, label="Sharpness", from_=0, to=2, resolution=0.1, 
 colorSlider = Scale(menu, label="Color", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
 
 clear_dr_button = tk.Button(menu, text='Clear drawing', bg='pink', command=lambda: clear_drawing(canvas))
-clear_all_button = tk.Button(menu, text='Destroy image', bg='pink', command=lambda: clear_all(canvas))
+clear_all_button = tk.Button(menu, text='Go back to original', bg='pink', command=go_back, width=20)
 save_button = tk.Button(menu, text='Save', command=save)
+
+
 
 filter_label = tk.Label(menu, text="Select filter")
 filter_combobox = ttk.Combobox(menu, values=["Emboss", "Blur"])
+
 
 pensizeSlider.set(5)
 brightnessSlider.set(1)
 contrastSlider.set(1)
 sharpnessSlider.set(1)
 colorSlider.set(1)
+
+
+
 
 open_button.pack(pady=5)
 open_button2.pack(pady=5)
@@ -158,13 +175,18 @@ clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
 save_button.pack(pady=5)
 
+
+
 image = Image.open("quebonafide-egzotykajpg.jpg")
 image = image.resize((700, 600))
 imageTK = ImageTk.PhotoImage(image)
 Label(photoside, image=imageTK).grid(row=0, column=0)
+original_image = image
 
 filter_combobox.bind("<<ComboboxSelected>>")
 
 resize_entry.bind("<FocusIn>", temp_text)
+
+
 
 app.mainloop()
