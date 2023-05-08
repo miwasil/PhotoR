@@ -26,7 +26,7 @@ def change_size(size):
 
 def displayimage(image):
     dispimage = ImageTk.PhotoImage(image)
-    photoside.configure(image=dispimage)
+    Label(photoside, image=dispimage).grid(row=0, column=0, padx=5, pady=5)
     photoside.image = dispimage
 
 
@@ -37,10 +37,10 @@ def blurr():
 
 def changeImg():
     global image
-    imgname = filedialog.askopenfilename(title="Change Image")
+    imgname = filedialog.askopenfilename()
     if imgname:
         image = Image.open(imgname)
-        image = image.resize((600, 600))
+        image = image.resize((700, 600))
         displayimage(image)
 
 
@@ -52,11 +52,11 @@ photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
 
 
-image = Image.open("quebonafide-egzotykajpg.jpg")
-width, height = int(image.width / 2), int(image.height / 2)
-image = image.resize((width, height), Image.LANCZOS)
-imageTK = ImageTk.PhotoImage(image)
-Label(photoside, image=imageTK).grid(row=0, column=0, padx=5, pady=5)
+# image = Image.open("quebonafide-egzotykajpg.jpg")
+# width, height = int(image.width / 2), int(image.height / 2)
+# image = image.resize((width, height), Image.LANCZOS)
+# imageTK = ImageTk.PhotoImage(image)
+# Label(photoside, image=imageTK).grid(row=0, column=0, padx=5, pady=5)
 
 
 

@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, Label
 from tkinter import colorchooser
 from PIL import Image, ImageOps, ImageTk, ImageFilter
 from tkinter import ttk
@@ -30,5 +30,3 @@ def clear_drawing(canvas):
 
 def clear_all(canvas):
     canvas.delete('all')
-
-
