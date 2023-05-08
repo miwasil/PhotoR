@@ -96,12 +96,11 @@ def temp_text(e):
     resize_entry.delete(0, "end")
 
 def resize(entry):
-    global image, original_image
+    global image
     size = entry.get()
     if 'x' in size:
         width, height = map(int, size.split('x'))
         image = image.resize((width, height))
-        original_image = image
         displayimage(image)
     else:
         pass
