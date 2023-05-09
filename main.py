@@ -5,7 +5,7 @@ from PIL import Image, ImageTk, ImageEnhance, ImageFilter
 
 app = tk.Tk()
 app.geometry('1000x600')
-app.minsize(1000, 800)
+app.minsize(1300, 1000)
 app.title('Photo Editor v1.0')
 app.config(bg='white')
 
@@ -13,6 +13,12 @@ file_path = ""
 pen_color = "black"
 pen_size = 5
 
+default_enhancements = {
+    "Brightness": 1.0,
+    "Contrast": 1.0,
+    "Sharpness": 1.0,
+    "Color": 1.0
+}
 
 def change_color():
     global pen_color
@@ -126,9 +132,33 @@ def resize(entry):
 def go_back():
     global image, original_image
     image = original_image
+    brightnessSlider.set(default_enhancements['Brightness'])
+    contrastSlider.set(default_enhancements['Contrast'])
+    sharpnessSlider.set(default_enhancements['Sharpness'])
+    colorSlider.set(default_enhancements['Color'])
+    displayimage(image)
+
+def set_default(name):
+    global image
+    if name == 'Brightness':
+        brightnessSlider.set(default_enhancements[name])
+    elif name == 'Contrast':
+        contrastSlider.set(default_enhancements[name])
+    elif name == 'Sharpness':
+        sharpnessSlider.set(default_enhancements[name])
+    elif name == 'Color':
+        colorSlider.set(default_enhancements[name])
     displayimage(image)
 
 
+
+def set_apply(slider, name):
+    global image
+    default_value = default_enhancements[name]
+    factor = float(slider.get()) if slider.get() else default_value
+    enhancer = getattr(ImageEnhance, name)(image)
+    image = enhancer.enhance(factor)
+    displayimage(image)
 
 
 menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
@@ -147,6 +177,13 @@ filemenu.add_command(label="Save", command=save)
 filemenu.add_command(label="Draw", command=create_canvas)
 menubar.add_cascade(label="File", menu=filemenu)
 
+
+pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL,
+                      command=lambda val: change_size(pensizeSlider.get()))
+brightnessSlider = Scale(menu, label="Brightness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=brightness)
+contrastSlider = Scale(menu, label="Contrast", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=contrast)
+sharpnessSlider = Scale(menu, label="Sharpness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=sharpen)
+colorSlider = Scale(menu, label="Color", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
 #open_button = tk.Button(menu, text='Open to draw', command=create_canvas)
 #open_button2 = tk.Button(menu, text='Open2', command=changeImg)
 resize_entry = Entry(menu, width=30)
@@ -156,22 +193,18 @@ blurr_button = tk.Button(menu, text='Blurr', command=blurr)
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
 rotate_button = tk.Button(menu, text='Rotate', command=rotate)
 flip_horizontal_button = tk.Button(menu, text='Flip Horizontal', command=flip_horizontal)
-apply1_button = tk.Button(menu, text='Apply')
-apply2_button = tk.Button(menu, text='Apply')
-apply3_button = tk.Button(menu, text='Apply')
-apply4_button = tk.Button(menu, text='Apply')
-
-pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL,
-                      command=lambda val: change_size(pensizeSlider.get()))
-brightnessSlider = Scale(menu, label="Brightness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=brightness)
-contrastSlider = Scale(menu, label="Contrast", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=contrast)
-sharpnessSlider = Scale(menu, label="Sharpness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=sharpen)
-colorSlider = Scale(menu, label="Color", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
+apply1_button = tk.Button(menu, text='Apply', command=lambda: set_apply(brightnessSlider, 'Brightness'))
+apply2_button = tk.Button(menu, text='Apply', command=lambda: set_apply(contrastSlider, 'Contrast'))
+apply3_button = tk.Button(menu, text='Apply', command=lambda: set_apply(sharpnessSlider, 'Sharpness'))
+apply4_button = tk.Button(menu, text='Apply', command=lambda: set_apply(colorSlider, 'Color'))
+default1_button = tk.Button(menu, text='Default', command=lambda: set_default('Brightness'))
+default2_button = tk.Button(menu, text='Default', command=lambda: set_default('Contrast'))
+default3_button = tk.Button(menu, text='Default', command=lambda: set_default('Sharpness'))
+default4_button = tk.Button(menu, text='Default', command=lambda: set_default('Color'))
 
 clear_dr_button = tk.Button(menu, text='Clear drawing', bg='pink', command=lambda: clear_drawing(canvas))
 clear_all_button = tk.Button(menu, text='Go back to original', bg='pink', command=go_back, width=20)
 #save_button = tk.Button(menu, text='Save', command=save)
-
 
 
 filter_label = tk.Label(menu, text="Select filter")
@@ -200,19 +233,23 @@ filter_label.pack()
 filter_combobox.pack()
 brightnessSlider.pack(pady=2)
 apply1_button.pack()
+default1_button.pack()
 contrastSlider.pack(pady=2)
 apply2_button.pack()
+default2_button.pack()
 sharpnessSlider.pack(pady=2)
 apply3_button.pack()
+default3_button.pack()
 colorSlider.pack(pady=2)
 apply4_button.pack()
+default4_button.pack()
 clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
 #save_button.pack(pady=5)
 
 
 
-image = Image.open("dc.png")
+image = Image.open("quebonafide-egzotykajpg.jpg")
 image = image.resize((700, 600))
 imageTK = ImageTk.PhotoImage(image)
 initial_photo = image.resize((200,100))
