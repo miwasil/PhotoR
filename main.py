@@ -13,6 +13,12 @@ file_path = ""
 pen_color = "black"
 pen_size = 5
 
+default_enhancements = {
+    "Brightness": 1.0,
+    "Contrast": 1.0,
+    "Sharpness": 1.0,
+    "Color": 1.0
+}
 
 def change_color():
     global pen_color
@@ -158,8 +164,31 @@ def resize(entry):
 def go_back():
     global image, original_image
     image = original_image
+    brightnessSlider.set(default_enhancements['Brightness'])
+    contrastSlider.set(default_enhancements['Contrast'])
+    sharpnessSlider.set(default_enhancements['Sharpness'])
+    colorSlider.set(default_enhancements['Color'])
     displayimage(image)
 
+def set_default(name):
+    global image
+    if name == 'Brightness':
+        brightnessSlider.set(default_enhancements[name])
+    elif name == 'Contrast':
+        contrastSlider.set(default_enhancements[name])
+    elif name == 'Sharpness':
+        sharpnessSlider.set(default_enhancements[name])
+    elif name == 'Color':
+        colorSlider.set(default_enhancements[name])
+    displayimage(image)
+
+def set_apply(slider, name):
+    global image
+    default_value = default_enhancements[name]
+    factor = float(slider.get()) if slider.get() else default_value
+    enhancer = getattr(ImageEnhance, name)(image)
+    image = enhancer.enhance(factor)
+    displayimage(image)
 
 
 
@@ -199,6 +228,17 @@ contrastSlider = Scale(menu, label="Contrast", from_=0, to=2, resolution=0.1, or
 sharpnessSlider = Scale(menu, label="Sharpness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=sharpen)
 colorSlider = Scale(menu, label="Color", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
 
+apply1_button = tk.Button(menu, text='Apply', command=lambda: set_apply(brightnessSlider, 'Brightness'))
+apply2_button = tk.Button(menu, text='Apply', command=lambda: set_apply(contrastSlider, 'Contrast'))
+apply3_button = tk.Button(menu, text='Apply', command=lambda: set_apply(sharpnessSlider, 'Sharpness'))
+apply4_button = tk.Button(menu, text='Apply', command=lambda: set_apply(colorSlider, 'Color'))
+default1_button = tk.Button(menu, text='Default', command=lambda: set_default('Brightness'))
+default2_button = tk.Button(menu, text='Default', command=lambda: set_default('Contrast'))
+default3_button = tk.Button(menu, text='Default', command=lambda: set_default('Sharpness'))
+default4_button = tk.Button(menu, text='Default', command=lambda: set_default('Color'))
+
+
+
 clear_dr_button = tk.Button(menu, text='Clear drawing', bg='pink', command=lambda: clear_drawing(canvas))
 clear_all_button = tk.Button(menu, text='Go back to original', bg='pink', command=go_back, width=20)
 #save_button = tk.Button(menu, text='Save', command=save)
@@ -234,12 +274,16 @@ pensizeSlider.pack(pady=5)
 filter_combobox.pack()
 brightnessSlider.pack(pady=2)
 apply1_button.pack()
+default1_button.pack()
 contrastSlider.pack(pady=2)
 apply2_button.pack()
+default2_button.pack()
 sharpnessSlider.pack(pady=2)
 apply3_button.pack()
+default3_button.pack()
 colorSlider.pack(pady=2)
 apply4_button.pack()
+default4_button.pack()
 clear_dr_button.pack(pady=5)
 clear_all_button.pack(pady=5)
 #save_button.pack(pady=5)
