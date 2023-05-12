@@ -64,6 +64,11 @@ def flip_horizontal():
     image = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
     displayimage(image)
 
+def flip_vertical():
+    global image
+    image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+    displayimage(image)
+
 
 
 def changeImg():
@@ -239,6 +244,7 @@ resize_button = tk.Button(menu, text='Resize', command=lambda: resize(resize_ent
 color_button = tk.Button(menu, text='Change color of draw', command=change_color)
 rotate_button = tk.Button(menu, text='Rotate', command=rotate)
 flip_horizontal_button = tk.Button(menu, text='Flip Horizontal', command=flip_horizontal)
+flip_vertical_button = tk.Button(menu, text='Flip Vertical', command=flip_vertical)
 apply1_button = tk.Button(menu, text='Apply')
 apply2_button = tk.Button(menu, text='Apply')
 apply3_button = tk.Button(menu, text='Apply')
@@ -293,6 +299,7 @@ resize_button.pack(pady=5)
 color_button.pack(pady=5)
 rotate_button.pack(pady=5)
 flip_horizontal_button.pack(pady=5)
+flip_vertical_button.pack()
 pensizeSlider.pack(pady=5)
 #filter_label.pack()
 filter_combobox.pack(pady=5)
