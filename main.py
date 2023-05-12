@@ -83,12 +83,31 @@ def changeImg():
 def save():
     global image
     savefile = filedialog.asksaveasfile(defaultextension=".jpg")
-    outputImage.save(savefile)
+    image.save(savefile)
 
 
 def choose_filter(filter):
+    global outputImage, image
+    match filter:
+        case 'Emboss':
+            outputImage = image.filter(ImageFilter.EMBOSS)
+        case 'Blur':
+            outputImage = image.filter(ImageFilter.BLUR)
+        case 'Contour':
+            outputImage = image.filter(ImageFilter.CONTOUR)
+        case 'Smooth':
+            outputImage = image.filter(ImageFilter.SMOOTH_MORE)
+        case 'Detail':
+            outputImage = image.filter(ImageFilter.DETAIL)
+        case 'Edge enhance':
+            outputImage = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
+        case 'No filter':
+            outputImage = image
+
+    displayimage(outputImage)
+
+def set_filter(filter):
     global image
-    image = original_image
     match filter:
         case 'Emboss':
             image = image.filter(ImageFilter.EMBOSS)
@@ -102,8 +121,12 @@ def choose_filter(filter):
             image = image.filter(ImageFilter.DETAIL)
         case 'Edge enhance':
             image = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
+        case 'No filter':
+            pass
 
     displayimage(image)
+
+
 def brightness(factor):
     factor = float(factor)
     global outputImage
@@ -223,10 +246,10 @@ apply4_button = tk.Button(menu, text='Apply')
 
 pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL,
                       command=lambda val: change_size(pensizeSlider.get()))
-brightnessSlider = Scale(menu, label="Brightness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=brightness)
-contrastSlider = Scale(menu, label="Contrast", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=contrast)
-sharpnessSlider = Scale(menu, label="Sharpness", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=sharpen)
-colorSlider = Scale(menu, label="Color", from_=0, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
+brightnessSlider = Scale(menu, label="Brightness", from_=0.1, to=2, resolution=0.1, orient=HORIZONTAL, command=brightness)
+contrastSlider = Scale(menu, label="Contrast", from_=0.1, to=2, resolution=0.1, orient=HORIZONTAL, command=contrast)
+sharpnessSlider = Scale(menu, label="Sharpness", from_=0.1, to=2, resolution=0.1, orient=HORIZONTAL, command=sharpen)
+colorSlider = Scale(menu, label="Color", from_=0.1, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
 
 apply1_button = tk.Button(menu, text='Apply', command=lambda: set_apply(brightnessSlider, 'Brightness'))
 apply2_button = tk.Button(menu, text='Apply', command=lambda: set_apply(contrastSlider, 'Contrast'))
@@ -236,6 +259,7 @@ default1_button = tk.Button(menu, text='Default', command=lambda: set_default('B
 default2_button = tk.Button(menu, text='Default', command=lambda: set_default('Contrast'))
 default3_button = tk.Button(menu, text='Default', command=lambda: set_default('Sharpness'))
 default4_button = tk.Button(menu, text='Default', command=lambda: set_default('Color'))
+apply_filter = tk.Button(menu, text='Apply', command=lambda: set_filter(filter_combobox.get()))
 
 
 
@@ -244,7 +268,7 @@ clear_all_button = tk.Button(menu, text='Go back to original', bg='pink', comman
 #save_button = tk.Button(menu, text='Save', command=save)
 
 
-values = ("Emboss", "Blur", "Contour", "Smooth", "Detail", "Edge enhance")
+values = ("No filter", "Emboss", "Blur", "Contour", "Smooth", "Detail", "Edge enhance")
 filter_combobox = ttk.Combobox(menu, values=values)
 filter_combobox['state'] = 'readonly'
 filter_combobox.set('Select filter')
@@ -271,7 +295,8 @@ rotate_button.pack(pady=5)
 flip_horizontal_button.pack(pady=5)
 pensizeSlider.pack(pady=5)
 #filter_label.pack()
-filter_combobox.pack()
+filter_combobox.pack(pady=5)
+apply_filter.pack()
 brightnessSlider.pack(pady=2)
 apply1_button.pack()
 default1_button.pack()
