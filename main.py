@@ -2,12 +2,24 @@ import tkinter as tk
 from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label, Entry
 from basicFuncs import draw, clear_drawing, clear_all, open_image
 from PIL import Image, ImageTk, ImageEnhance, ImageFilter
+#from sv_ttk import azure
+
 
 app = tk.Tk()
-app.geometry('1000x600')
-app.minsize(1000, 800)
+# app.geometry('1000x600')
+# app.minsize(1000, 800)
 app.title('Photo Editor v1.0')
-app.config(bg='white')
+
+app.tk.call("source", "azure.tcl")
+app.tk.call("set_theme", "dark")
+
+
+
+app.update()
+app.minsize(app.winfo_width(), app.winfo_height())
+x_cordinate = int((app.winfo_screenwidth() / 2) - (app.winfo_width() / 2))
+y_cordinate = int((app.winfo_screenheight() / 2) - (app.winfo_height() / 2))
+app.geometry("+{}+{}".format(x_cordinate, y_cordinate - 20))
 
 file_path = ""
 pen_color = "black"
@@ -196,6 +208,7 @@ def go_back():
     contrastSlider.set(default_enhancements['Contrast'])
     sharpnessSlider.set(default_enhancements['Sharpness'])
     colorSlider.set(default_enhancements['Color'])
+    pensizeSlider.set(5)
     displayimage(image)
 
 def set_default(name):
@@ -218,16 +231,23 @@ def set_apply(slider, name):
     image = enhancer.enhance(factor)
     displayimage(image)
 
+def change_theme():
+    if app.tk.call("ttk::style", "theme", "use") == "azure-dark":
+        app.tk.call("set_theme", "light")
+    else:
+        app.tk.call("set_theme", "dark")
 
 
-menu = tk.Frame(app, bg='#856ff8')  # zawsze stworzyc i potem
+
+
+menu = ttk.Frame(app, style='Card.TFrame', padding=(5, 6, 7, 8))  # zawsze stworzyc i potem , bg='#856ff8'
 menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to gdzies wlozyc
 
-photoside = tk.Frame(app)
+photoside = ttk.Frame(app)
 photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
-edit_photo_frame = tk.Frame(menu)
-edit_photo_frame.pack(side=tk.BOTTOM)
+edit_photo_frame = ttk.Frame(menu)
+
 
 menubar = tk.Menu(menu)
 filemenu = tk.Menu(menubar, tearoff=0)
@@ -236,43 +256,33 @@ filemenu.add_command(label="Save", command=save)
 filemenu.add_command(label="Draw", command=create_canvas)
 menubar.add_cascade(label="File", menu=filemenu)
 
-#open_button = tk.Button(menu, text='Open to draw', command=create_canvas)
-#open_button2 = tk.Button(menu, text='Open2', command=changeImg)
-resize_entry = Entry(menu, width=30)
+resize_entry = ttk.Entry(menu, width=30)
 resize_entry.insert(0, "Provide with format 0000x0000")
-resize_button = tk.Button(menu, text='Resize', command=lambda: resize(resize_entry))
-color_button = tk.Button(menu, text='Change color of draw', command=change_color)
-rotate_button = tk.Button(menu, text='Rotate', command=rotate)
-flip_horizontal_button = tk.Button(menu, text='Flip Horizontal', command=flip_horizontal)
-flip_vertical_button = tk.Button(menu, text='Flip Vertical', command=flip_vertical)
-apply1_button = tk.Button(menu, text='Apply')
-apply2_button = tk.Button(menu, text='Apply')
-apply3_button = tk.Button(menu, text='Apply')
-apply4_button = tk.Button(menu, text='Apply')
+resize_button = ttk.Button(menu, text='Resize', command=lambda: resize(resize_entry))
+color_button = ttk.Button(menu, text='Change color of draw', command=change_color)
+rotate_button = ttk.Button(menu, text='Rotate', command=rotate)
+flip_horizontal_button = ttk.Button(menu, text='Flip Horizontal', command=flip_horizontal)
+flip_vertical_button = ttk.Button(menu, text='Flip Vertical', command=flip_vertical)
+changetheme_button = ttk.Checkbutton(menu, text='Dark/Light mode', style='Switch.TCheckbutton', command=change_theme)
 
-pensizeSlider = Scale(menu, label="Change size of pen", from_=1, to=10, orient=HORIZONTAL,
-                      command=lambda val: change_size(pensizeSlider.get()))
-brightnessSlider = Scale(menu, label="Brightness", from_=0.1, to=2, resolution=0.1, orient=HORIZONTAL, command=brightness)
-contrastSlider = Scale(menu, label="Contrast", from_=0.1, to=2, resolution=0.1, orient=HORIZONTAL, command=contrast)
-sharpnessSlider = Scale(menu, label="Sharpness", from_=0.1, to=2, resolution=0.1, orient=HORIZONTAL, command=sharpen)
-colorSlider = Scale(menu, label="Color", from_=0.1, to=2, resolution=0.1, orient=HORIZONTAL, command=color)
+pensizeSlider = ttk.Scale(menu,  from_=1, to=10, style='Tick.TScale',orient=HORIZONTAL,
+                      command=lambda val: change_size(pensizeSlider.get())) #label="Change size of pen",
+brightnessSlider = ttk.Scale(menu, from_=0.1, to=2, orient=HORIZONTAL, command=brightness)
+contrastSlider = ttk.Scale(menu, from_=0.1, to=2, orient=HORIZONTAL, command=contrast)
+sharpnessSlider = ttk.Scale(menu, from_=0.1, to=2, orient=HORIZONTAL, command=sharpen)
+colorSlider = ttk.Scale(menu, from_=0.1, to=2,  orient=HORIZONTAL, command=color)
 
-apply1_button = tk.Button(menu, text='Apply', command=lambda: set_apply(brightnessSlider, 'Brightness'))
-apply2_button = tk.Button(menu, text='Apply', command=lambda: set_apply(contrastSlider, 'Contrast'))
-apply3_button = tk.Button(menu, text='Apply', command=lambda: set_apply(sharpnessSlider, 'Sharpness'))
-apply4_button = tk.Button(menu, text='Apply', command=lambda: set_apply(colorSlider, 'Color'))
-default1_button = tk.Button(menu, text='Default', command=lambda: set_default('Brightness'))
-default2_button = tk.Button(menu, text='Default', command=lambda: set_default('Contrast'))
-default3_button = tk.Button(menu, text='Default', command=lambda: set_default('Sharpness'))
-default4_button = tk.Button(menu, text='Default', command=lambda: set_default('Color'))
-apply_filter = tk.Button(menu, text='Apply', command=lambda: set_filter(filter_combobox.get()))
-
-
-
-clear_dr_button = tk.Button(menu, text='Clear drawing', bg='pink', command=lambda: clear_drawing(canvas))
-clear_all_button = tk.Button(menu, text='Go back to original', bg='pink', command=go_back, width=20)
-#save_button = tk.Button(menu, text='Save', command=save)
-
+apply1_button = ttk.Button(menu, text='Apply', command=lambda: set_apply(brightnessSlider, 'Brightness'))
+apply2_button = ttk.Button(menu, text='Apply', command=lambda: set_apply(contrastSlider, 'Contrast'))
+apply3_button = ttk.Button(menu, text='Apply', command=lambda: set_apply(sharpnessSlider, 'Sharpness'))
+apply4_button = ttk.Button(menu, text='Apply', command=lambda: set_apply(colorSlider, 'Color'))
+default1_button = ttk.Button(menu, text='Default', command=lambda: set_default('Brightness'))
+default2_button = ttk.Button(menu, text='Default', command=lambda: set_default('Contrast'))
+default3_button = ttk.Button(menu, text='Default', command=lambda: set_default('Sharpness'))
+default4_button = ttk.Button(menu, text='Default', command=lambda: set_default('Color'))
+apply_filter = ttk.Button(menu, text='Apply', command=lambda: set_filter(filter_combobox.get()))
+clear_dr_button = ttk.Button(menu, text='Clear drawing', style='Accent.TButton', command=lambda: clear_drawing(canvas))
+clear_all_button = ttk.Button(menu, text='Go back to original', style='Accent.TButton', command=go_back, width=20)
 
 values = ("No filter", "Emboss", "Blur", "Contour", "Smooth", "Detail", "Edge enhance")
 filter_combobox = ttk.Combobox(menu, values=values)
@@ -280,7 +290,11 @@ filter_combobox['state'] = 'readonly'
 filter_combobox.set('Select filter')
 filter_combobox.bind("<<ComboboxSelected>>", lambda event: choose_filter(filter_combobox.get()))
 
-
+size_text = ttk.Label(menu, text='Change size of pen')
+br_text = ttk.Label(menu, text='Brightness')
+ct_text = ttk.Label(menu, text='Contrast')
+sh_text = ttk.Label(menu, text='Sharpness')
+cl_text = ttk.Label(menu, text='Color')
 
 
 pensizeSlider.set(5)
@@ -290,37 +304,37 @@ sharpnessSlider.set(1)
 colorSlider.set(1)
 
 
+resize_entry.grid(row=0, column=0, padx=5, pady=10, sticky='nsew')
+resize_button.grid(row=0, column=1, padx=5, pady=10, sticky='nsew')
+color_button.grid(row=1, column=0, padx=5, pady=10, sticky='ns')
+size_text.grid(row=1, column=1, padx=5, pady=50)
+pensizeSlider.grid(row=1, column=2, padx=5, pady=10)
+rotate_button.grid(row=2, column=0, padx=5, pady=10)
+flip_horizontal_button.grid(row=2, column=1, padx=5, pady=10)
+flip_vertical_button.grid(row=2, column=2, padx=5, pady=10)
+filter_combobox.grid(row=3, column=0, padx=5, pady=10)
+apply_filter.grid(row=3, column=1, padx=5, pady=10)
+br_text.grid(row=4, column=0, padx=5, pady=10)
+brightnessSlider.grid(row=4, column=1, padx=5, pady=10)
+apply1_button.grid(row=4, column=2, padx=5, pady=10)
+default1_button.grid(row=4, column=3, padx=5, pady=10)
+ct_text.grid(row=5, column=0, padx=5, pady=10)
+contrastSlider.grid(row=5, column=1, padx=5, pady=10)
+apply2_button.grid(row=5, column=2, padx=5, pady=10)
+default2_button.grid(row=5, column=3, padx=5, pady=10)
+sh_text.grid(row=6, column=0, padx=5, pady=10)
+sharpnessSlider.grid(row=6, column=1, padx=5, pady=10)
+apply3_button.grid(row=6, column=2, padx=5, pady=10)
+default3_button.grid(row=6, column=3, padx=5, pady=10)
+cl_text.grid(row=7, column=0, padx=5, pady=10)
+colorSlider.grid(row=7, column=1, padx=5, pady=10)
+apply4_button.grid(row=7, column=2, padx=5, pady=10)
+default4_button.grid(row=7, column=3, padx=5, pady=10)
+changetheme_button.grid(row=8, column=0, padx=5, pady=10)
+clear_dr_button.grid(row=8, column=1, padx=5, pady=10)
+clear_all_button.grid(row=8, column=2, padx=5, pady=10)
 
-
-#open_button.pack(pady=5)
-#open_button2.pack(pady=5)
-resize_entry.pack(pady=5)
-resize_button.pack(pady=5)
-color_button.pack(pady=5)
-rotate_button.pack(pady=5)
-flip_horizontal_button.pack(pady=5)
-flip_vertical_button.pack()
-pensizeSlider.pack(pady=5)
-#filter_label.pack()
-filter_combobox.pack(pady=5)
-apply_filter.pack()
-brightnessSlider.pack(pady=2)
-apply1_button.pack()
-default1_button.pack()
-contrastSlider.pack(pady=2)
-apply2_button.pack()
-default2_button.pack()
-sharpnessSlider.pack(pady=2)
-apply3_button.pack()
-default3_button.pack()
-colorSlider.pack(pady=2)
-apply4_button.pack()
-default4_button.pack()
-clear_dr_button.pack(pady=5)
-clear_all_button.pack(pady=5)
-#save_button.pack(pady=5)
-
-
+edit_photo_frame.grid(row=9, column=0, sticky="S")
 
 image = None
 #image = image.resize((700, 600))
@@ -337,4 +351,6 @@ resize_entry.bind("<FocusIn>", temp_text)
 app.state('zoomed')
 app.resizable(False,False)
 app.config(menu=menubar)
+
+
 app.mainloop()
