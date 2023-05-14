@@ -107,47 +107,30 @@ def save():
 
 
 def choose_filter(filter):
-    global outputImage, image
+    global outputImage2, image
     match filter:
         case 'Emboss':
-            outputImage = image.filter(ImageFilter.EMBOSS)
+            outputImage2 = image.filter(ImageFilter.EMBOSS)
         case 'Blur':
-            outputImage = image.filter(ImageFilter.BLUR)
+            outputImage2 = image.filter(ImageFilter.BLUR)
         case 'Contour':
-            outputImage = image.filter(ImageFilter.CONTOUR)
+            outputImage2 = image.filter(ImageFilter.CONTOUR)
         case 'Smooth':
-            outputImage = image.filter(ImageFilter.SMOOTH_MORE)
+            outputImage2 = image.filter(ImageFilter.SMOOTH_MORE)
         case 'Detail':
-            outputImage = image.filter(ImageFilter.DETAIL)
+            outputImage2 = image.filter(ImageFilter.DETAIL)
         case 'Edge enhance':
-            outputImage = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
+            outputImage2 = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
         case 'No filter':
-            outputImage = image
+            outputImage2 = image
         case 'Use carefully!':
-            outputImage = max_colors(image)
+            outputImage2 = max_colors(image)
 
-    displayimage(outputImage)
+    displayimage(outputImage2)
 
 def set_filter(filter):
-    global image
-    match filter:
-        case 'Emboss':
-            image = image.filter(ImageFilter.EMBOSS)
-        case 'Blur':
-            image = image.filter(ImageFilter.BLUR)
-        case 'Contour':
-            image = image.filter(ImageFilter.CONTOUR)
-        case 'Smooth':
-            image = image.filter(ImageFilter.SMOOTH_MORE)
-        case 'Detail':
-            image = image.filter(ImageFilter.DETAIL)
-        case 'Edge enhance':
-            image = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
-        case 'No filter':
-            pass
-        case 'Use carefully!':
-            image = max_colors(image)
-
+    global image, outputImage2
+    image = outputImage2
     displayimage(image)
 
 
