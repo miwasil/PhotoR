@@ -1,13 +1,15 @@
+import subprocess
 import tkinter as tk
 from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label, Entry
 from basicFuncs import draw, clear_drawing, clear_all, open_image
 from PIL import Image, ImageTk, ImageEnhance, ImageFilter
+import io
 #from sv_ttk import azure
 
 
 app = tk.Tk()
-# app.geometry('1000x600')
-# app.minsize(1000, 800)
+app.geometry('1400x700')
+#app.minsize(1000, 800)
 app.title('Photo Editor v1.0')
 
 app.tk.call("source", "azure.tcl")
@@ -41,23 +43,26 @@ def change_size(size):
     global pen_size
     pen_size = size
 
-def scale():
-    global image
-    frame_width = photoside.winfo_width()/2
-    frame_height = photoside.winfo_height()/2
+def scale(image, frame_width, frame_height):
+    #global image
+    frame_width = frame_width*0.8
+    frame_height = frame_height*0.8
     image_width, image_height = image.size
+    scaled_image = image
+
     if (image_width > frame_width) or (image_height > frame_height):
-        factor = 1/min(image_height/frame_height, image_width/frame_width)
+        factor = 1/max(image_height/frame_height, image_width/frame_width)
         print(factor)
-        new_image_size = (int(image.size[0]*factor),int(image.size[1]*factor))
+        new_image_size = (int(image.size[0]*factor), int(image.size[1]*factor))
         print(new_image_size)
-        image = image.resize(new_image_size)
+        scaled_image = image.resize(new_image_size)
+    return scaled_image
 def displayimage(image):
     frame_width = photoside.winfo_width()
     frame_height = photoside.winfo_height()
     center_x = frame_width // 2
     center_y = frame_height // 2
-    scale()
+    image = scale(image, frame_width, frame_height)
     dispimage = ImageTk.PhotoImage(image)
     Label(photoside, image=dispimage).place(x=center_x, y=center_y, anchor='center')
     photoside.image = dispimage
@@ -88,13 +93,17 @@ def changeImg():
     imgname = filedialog.askopenfilename()
     if imgname:
         image = Image.open(imgname)
-        scale()
+        #scale()
         original_image = image
         displayimage(image)
         initial_photo = image
-        initial_photo = image.resize((200, 100))
+        frame_width = edit_photo_frame.winfo_width()
+        frame_height = edit_photo_frame.winfo_height()
+        center_x = frame_width // 2
+        center_y = frame_height // 2
+        initial_photo = scale(image, frame_width, frame_height)
         initial_photo_TK = ImageTk.PhotoImage(initial_photo)
-        Label(edit_photo_frame, image=initial_photo_TK).grid(row=0, column=0)
+        Label(edit_photo_frame, image=initial_photo_TK).place(x=center_x, y=center_y, anchor='center')
         edit_photo_frame.image = initial_photo_TK
 
 def save():
@@ -125,6 +134,7 @@ def choose_filter(filter):
 
 def set_filter(filter):
     global image
+    image = original_image
     match filter:
         case 'Emboss':
             image = image.filter(ImageFilter.EMBOSS)
@@ -177,14 +187,26 @@ def color(factor):
     outputImage = enhancer.enhance(factor)
     displayimage(outputImage)
 
+def open_image(canvas, photo):
+    global image
+    photo = ImageTk.PhotoImage(photo)
+    canvas.image = photo
+    canvas.create_image((0,0), image=photo, anchor='nw')
+    #ps_data = canvas.postscript(colormode='color')
+    #image = Image.open(io.BytesIO(ps_data.encode('utf-8')))
+
 
 def create_canvas():
-    global canvas
+    global canvas, image
     canvas = tk.Canvas(photoside, bg='white')
-    canvas.grid(row=0, column=0)
+    frame_width = photoside.winfo_width()
+    frame_height = photoside.winfo_height()
+    canvas.place(relx=0.5, rely=0.5, anchor='center')
     canvas.bind("<B1-Motion>", lambda event: draw(canvas, event, pen_size, pen_color))
     pensizeSlider.config(state='normal')
     color_button.config(state='normal')
+    image = scale(image, frame_width, frame_height)
+    canvas.config(width=image.width, height=image.height)
     open_image(canvas, image)
 
 def temp_text(e):
@@ -193,13 +215,14 @@ def temp_text(e):
 def resize(entry):
     global image
     size = entry.get()
-    if 'x' in size:
-        width, height = map(int, size.split('x'))
-        image = image.resize((width, height))
+    if image is not None:
+        if 'x' in size:
+            width, height = map(int, size.split('x'))
+            image = image.resize((width, height))
+            displayimage(image)
+        else:
+            pass
         displayimage(image)
-    else:
-        pass
-    displayimage(image)
 
 def go_back():
     global image, original_image
@@ -246,8 +269,9 @@ menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to 
 photoside = ttk.Frame(app)
 photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
-edit_photo_frame = ttk.Frame(menu)
-
+edit_photo_frame = tk.Frame(menu, width=400, height=300)
+edit_photo_frame.place(relx=0.5, rely=1, anchor='s')
+#edit_photo_frame.config(bg='red')
 
 menubar = tk.Menu(menu)
 filemenu = tk.Menu(menubar, tearoff=0)
@@ -348,7 +372,7 @@ original_image = image
 filter_combobox.bind("<<ComboboxSelected>>")
 
 resize_entry.bind("<FocusIn>", temp_text)
-app.state('zoomed')
+#app.attributes('-fullscreen', True)
 app.resizable(False,False)
 app.config(menu=menubar)
 
