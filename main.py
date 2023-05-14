@@ -345,7 +345,7 @@ image = None
 original_image = image
 
 resize_entry.bind("<FocusIn>", temp_text)
-# app.resizable(False,False)
+app.resizable(False,False)
 app.config(menu=menubar)
 
 
