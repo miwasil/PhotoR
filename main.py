@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label, Entry
 from basicFuncs import draw, clear_drawing, clear_all, open_image
 from PIL import Image, ImageTk, ImageEnhance, ImageFilter
+
 import io
 
 
@@ -31,6 +32,42 @@ default_enhancements = {
     "Sharpness": 1.0,
     "Color": 1.0
 }
+
+def max_colors():
+    global image
+    img = image
+    img_out = img
+    img = img.convert("RGBA")
+    img_out = img_out.convert("RGBA")
+    width, height = img.size
+    numb_of_pixs = 8 # zmień na 21 :>                                        good luck :)
+    pixs_taken = numb_of_pixs // 2 - 1
+    for y in range(pixs_taken + 1, height - pixs_taken - 1):
+        for x in range(pixs_taken + 1, width - pixs_taken - 1):
+            list_R = []
+            list_G = []
+            list_B = []
+
+            for i in range(x - pixs_taken, x + pixs_taken):
+                for j in range(y - pixs_taken, y + pixs_taken):
+                    pixel_colour = img.getpixel((i, j))
+                    # print(i + j)
+                    # print(pixel_colour)
+                    list_R.append(pixel_colour[0])
+                    list_G.append(pixel_colour[1])
+                    list_B.append(pixel_colour[2])
+                # print("-----------------")
+                # print(list_R)
+                # print(max(list_G))
+            img_out.putpixel((x, y), (max(list_R), max(list_G), max(list_B), 255))
+            # img.getpixel((i, j))
+    #length = 255-4
+    #pool = string.ascii_letters
+    #random_string = ''.join(random.choice(pool) for i in range(length))
+    #bubu = random_string+".png"
+    #img_out.save(bubu)
+    image = img_out
+    displayimage(img_out)
 
 def change_color():
     global pen_color
@@ -302,7 +339,7 @@ default4_button = ttk.Button(menu, text='Default', command=lambda: set_default('
 apply_filter = ttk.Button(menu, text='Apply', command=lambda: set_filter(filter_combobox.get()))
 clear_dr_button = ttk.Button(menu, text='Clear drawing', style='Accent.TButton', command=lambda: clear_drawing(canvas))
 clear_all_button = ttk.Button(menu, text='Go back to original', style='Accent.TButton', command=go_back, width=20)
-
+max_colors_button = ttk.Button(menu, text='Use carefully', command=max_colors)
 values = ("No filter", "Emboss", "Blur", "Contour", "Smooth", "Detail", "Edge enhance")
 filter_combobox = ttk.Combobox(menu, values=values)
 filter_combobox['state'] = 'readonly'
@@ -361,9 +398,10 @@ resize_button.place(x=288, y=10)
 size_text.place(x=30, y=58)
 pensizeSlider.place(x=125, y=60, width=140)
 color_button.place(x=284, y=52)
-rotate_button.place(x=50, y=95)
-flip_horizontal_button.place(x=153, y=95)
-flip_vertical_button.place(x=270, y=95)
+rotate_button.place(x=6, y=95)
+flip_horizontal_button.place(x=198, y=95)
+flip_vertical_button.place(x=102, y=95)
+max_colors_button.place(x=308, y=95)
 filter_combobox.place(x=70, y=140)
 apply_filter.place(x=240, y=140)
 br_text.place(x=30, y=190)
@@ -397,7 +435,7 @@ image = None
 #Label(edit_photo_frame, image=initial_photo_TK).grid(row=0, column=0)
 original_image = image
 
-filter_combobox.bind("<<ComboboxSelected>>")
+#filter_combobox.bind("<<ComboboxSelected>>")
 
 resize_entry.bind("<FocusIn>", temp_text)
 # app.state('zoomed')
