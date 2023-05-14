@@ -264,7 +264,7 @@ menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to 
 photoside = ttk.Frame(app)
 photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
-edit_photo_frame = tk.Frame(menu, width=400, height=300)
+edit_photo_frame = tk.Frame(menu, width=400, height=230)
 edit_photo_frame.place(relx=0.5, rely=1, anchor='s')
 #edit_photo_frame.config(bg='red')
 
