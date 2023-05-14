@@ -1,20 +1,15 @@
 import tkinter as tk
-from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label, Entry
-from basicFuncs import draw, clear_drawing, clear_all, open_image
+from tkinter import colorchooser, HORIZONTAL, ttk, filedialog, Label
+from basicFuncs import draw, clear_drawing, open_image, max_colors
 from PIL import Image, ImageTk, ImageEnhance, ImageFilter
-
-import io
 
 
 app = tk.Tk()
 app.geometry('1400x700')
-#app.minsize(1000, 800)
 app.title('PhotoR')
 
 app.tk.call("source", "azure.tcl")
 app.tk.call("set_theme", "dark")
-
-
 
 app.update()
 app.minsize(app.winfo_width(), app.winfo_height())
@@ -32,41 +27,6 @@ default_enhancements = {
     "Sharpness": 1.0,
     "Color": 1.0
 }
-
-def max_colors(image):
-    img = image
-    img_out = img
-    img = img.convert("RGBA")
-    img_out = img_out.convert("RGBA")
-    width, height = img.size
-    numb_of_pixs = 8 # zmień na 21 :>                                        good luck :)
-    pixs_taken = numb_of_pixs // 2 - 1
-    for y in range(pixs_taken + 1, height - pixs_taken - 1):
-        for x in range(pixs_taken + 1, width - pixs_taken - 1):
-            list_R = []
-            list_G = []
-            list_B = []
-
-            for i in range(x - pixs_taken, x + pixs_taken):
-                for j in range(y - pixs_taken, y + pixs_taken):
-                    pixel_colour = img.getpixel((i, j))
-                    # print(i + j)
-                    # print(pixel_colour)
-                    list_R.append(pixel_colour[0])
-                    list_G.append(pixel_colour[1])
-                    list_B.append(pixel_colour[2])
-                # print("-----------------")
-                # print(list_R)
-                # print(max(list_G))
-            img_out.putpixel((x, y), (max(list_R), max(list_G), max(list_B), 255))
-            # img.getpixel((i, j))
-    #length = 255-4
-    #pool = string.ascii_letters
-    #random_string = ''.join(random.choice(pool) for i in range(length))
-    #bubu = random_string+".png"
-    #img_out.save(bubu)
-    image = img_out
-    return img_out
 
 def change_color():
     global pen_color
@@ -89,6 +49,7 @@ def scale(image, frame_width, frame_height):
         new_image_size = (int(image.size[0]*factor), int(image.size[1]*factor))
         scaled_image = image.resize(new_image_size)
     return scaled_image
+
 def displayimage(image):
     frame_width = photoside.winfo_width()
     frame_height = photoside.winfo_height()
@@ -297,8 +258,6 @@ def change_theme():
         app.tk.call("set_theme", "dark")
 
 
-
-
 menu = ttk.Frame(app, style='Card.TFrame', padding=(5, 6, 7, 8))  # zawsze stworzyc i potem , bg='#856ff8'
 menu.place(x=0, y=0, relwidth=0.3, relheight=1)  # pack, place lub grid zeby to gdzies wlozyc
 
@@ -395,19 +354,15 @@ clear_all_button.place(x=212, y=400, width=167)
 
 
 image = None
-#image = image.resize((700, 600))
-#imageTK = ImageTk.PhotoImage(image)
-#initial_photo = image.resize((200,100))
-#initial_photo_TK = ImageTk.PhotoImage(initial_photo)
-#Label(photoside, image=imageTK).grid(row=0, column=0)
-#Label(edit_photo_frame, image=initial_photo_TK).grid(row=0, column=0)
+# imageTK = ImageTk.PhotoImage(image)
+# initial_photo = image.resize((200,100))
+# initial_photo_TK = ImageTk.PhotoImage(initial_photo)
+# Label(photoside, image=imageTK).grid(row=0, column=0)
+# Label(edit_photo_frame, image=initial_photo_TK).grid(row=0, column=0)
 original_image = image
 
-#filter_combobox.bind("<<ComboboxSelected>>")
-
 resize_entry.bind("<FocusIn>", temp_text)
-# app.state('zoomed')
-app.resizable(False,False)
+# app.resizable(False,False)
 app.config(menu=menubar)
 
 
