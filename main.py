@@ -141,6 +141,7 @@ def changeImg():
 
 def save():
     global image
+    image = image.convert('RGB')
     savefile = filedialog.asksaveasfile(defaultextension=".jpg")
     image.save(savefile)
 
