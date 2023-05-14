@@ -9,7 +9,7 @@ import io
 app = tk.Tk()
 app.geometry('1400x700')
 #app.minsize(1000, 800)
-app.title('Photo Editor v1.0')
+app.title('PhotoR')
 
 app.tk.call("source", "azure.tcl")
 app.tk.call("set_theme", "dark")
@@ -33,8 +33,7 @@ default_enhancements = {
     "Color": 1.0
 }
 
-def max_colors():
-    global image
+def max_colors(image):
     img = image
     img_out = img
     img = img.convert("RGBA")
@@ -67,7 +66,7 @@ def max_colors():
     #bubu = random_string+".png"
     #img_out.save(bubu)
     image = img_out
-    displayimage(img_out)
+    return img_out
 
 def change_color():
     global pen_color
@@ -163,6 +162,8 @@ def choose_filter(filter):
             outputImage = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
         case 'No filter':
             outputImage = image
+        case 'Use carefully!':
+            outputImage = max_colors(image)
 
     displayimage(outputImage)
 
@@ -183,6 +184,8 @@ def set_filter(filter):
             image = image.filter(ImageFilter.EDGE_ENHANCE_MORE)
         case 'No filter':
             pass
+        case 'Use carefully!':
+            image = max_colors(image)
 
     displayimage(image)
 
@@ -304,7 +307,6 @@ photoside.place(relx=0.3, y=0, relwidth=0.7, relheight=1)
 
 edit_photo_frame = tk.Frame(menu, width=400, height=230)
 edit_photo_frame.place(relx=0.5, rely=1, anchor='s')
-#edit_photo_frame.config(bg='red')
 
 menubar = tk.Menu(menu)
 filemenu = tk.Menu(menubar, tearoff=0)
@@ -339,9 +341,9 @@ default3_button = ttk.Button(menu, text='Default', command=lambda: set_default('
 default4_button = ttk.Button(menu, text='Default', command=lambda: set_default('Color'))
 apply_filter = ttk.Button(menu, text='Apply', command=lambda: set_filter(filter_combobox.get()))
 clear_dr_button = ttk.Button(menu, text='Clear drawing', style='Accent.TButton', command=lambda: clear_drawing(canvas))
-clear_all_button = ttk.Button(menu, text='Go back to original', style='Accent.TButton', command=go_back, width=20)
-max_colors_button = ttk.Button(menu, text='Use carefully', command=max_colors)
-values = ("No filter", "Emboss", "Blur", "Contour", "Smooth", "Detail", "Edge enhance")
+clear_all_button = ttk.Button(menu, text='Original image', style='Accent.TButton', command=go_back, width=20)
+
+values = ("No filter", "Emboss", "Blur", "Contour", "Smooth", "Detail", "Edge enhance", "Use carefully!")
 filter_combobox = ttk.Combobox(menu, values=values)
 filter_combobox['state'] = 'readonly'
 filter_combobox.set('Select filter')
@@ -360,49 +362,14 @@ contrastSlider.set(1)
 sharpnessSlider.set(1)
 colorSlider.set(1)
 
-
-# resize_entry.grid(row=0, column=0, padx=5, pady=10, sticky='nsew')
-# resize_button.grid(row=0, column=1, padx=5, pady=10, sticky='nsew')
-# color_button.grid(row=1, column=0, padx=5, pady=10, sticky='ns')
-# size_text.grid(row=1, column=1, padx=5, pady=50)
-# pensizeSlider.grid(row=1, column=2, padx=5, pady=10)
-# rotate_button.grid(row=2, column=0, padx=5, pady=10)
-# flip_horizontal_button.grid(row=2, column=1, padx=5, pady=10)
-# flip_vertical_button.grid(row=2, column=2, padx=5, pady=10)
-# filter_combobox.grid(row=3, column=0, padx=5, pady=10)
-# apply_filter.grid(row=3, column=1, padx=5, pady=10)
-# br_text.grid(row=4, column=0, padx=5, pady=10)
-# brightnessSlider.grid(row=4, column=1, padx=5, pady=10)
-# apply1_button.grid(row=4, column=2, padx=5, pady=10)
-# default1_button.grid(row=4, column=3, padx=5, pady=10)
-# ct_text.grid(row=5, column=0, padx=5, pady=10)
-# contrastSlider.grid(row=5, column=1, padx=5, pady=10)
-# apply2_button.grid(row=5, column=2, padx=5, pady=10)
-# default2_button.grid(row=5, column=3, padx=5, pady=10)
-# sh_text.grid(row=6, column=0, padx=5, pady=10)
-# sharpnessSlider.grid(row=6, column=1, padx=5, pady=10)
-# apply3_button.grid(row=6, column=2, padx=5, pady=10)
-# default3_button.grid(row=6, column=3, padx=5, pady=10)
-# cl_text.grid(row=7, column=0, padx=5, pady=10)
-# colorSlider.grid(row=7, column=1, padx=5, pady=10)
-# apply4_button.grid(row=7, column=2, padx=5, pady=10)
-# default4_button.grid(row=7, column=3, padx=5, pady=10)
-# changetheme_button.grid(row=8, column=0, padx=5, pady=10)
-# clear_dr_button.grid(row=8, column=1, padx=5, pady=10)
-# clear_all_button.grid(row=8, column=2, padx=5, pady=10)
-#
-# edit_photo_frame.grid(row=9, column=0, sticky="S")
-
-
 resize_entry.place(x=30, y=10, width=245)
 resize_button.place(x=288, y=10)
 size_text.place(x=30, y=58)
 pensizeSlider.place(x=125, y=60, width=140)
 color_button.place(x=284, y=52)
-rotate_button.place(x=6, y=95)
-flip_horizontal_button.place(x=198, y=95)
-flip_vertical_button.place(x=102, y=95)
-max_colors_button.place(x=308, y=95)
+rotate_button.place(x=50, y=95)
+flip_horizontal_button.place(x=153, y=95)
+flip_vertical_button.place(x=270, y=95)
 filter_combobox.place(x=70, y=140)
 apply_filter.place(x=240, y=140)
 br_text.place(x=30, y=190)
