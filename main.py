@@ -1,10 +1,8 @@
-import subprocess
 import tkinter as tk
 from tkinter import colorchooser, Scale, HORIZONTAL, ttk, filedialog, Label, Entry
 from basicFuncs import draw, clear_drawing, clear_all, open_image
 from PIL import Image, ImageTk, ImageEnhance, ImageFilter
 import io
-#from sv_ttk import azure
 
 
 app = tk.Tk()
@@ -52,9 +50,7 @@ def scale(image, frame_width, frame_height):
 
     if (image_width > frame_width) or (image_height > frame_height):
         factor = 1/max(image_height/frame_height, image_width/frame_width)
-        print(factor)
         new_image_size = (int(image.size[0]*factor), int(image.size[1]*factor))
-        print(new_image_size)
         scaled_image = image.resize(new_image_size)
     return scaled_image
 def displayimage(image):
@@ -134,7 +130,6 @@ def choose_filter(filter):
 
 def set_filter(filter):
     global image
-    image = original_image
     match filter:
         case 'Emboss':
             image = image.filter(ImageFilter.EMBOSS)
@@ -283,7 +278,7 @@ menubar.add_cascade(label="File", menu=filemenu)
 resize_entry = ttk.Entry(menu, width=30)
 resize_entry.insert(0, "Provide with format 0000x0000")
 resize_button = ttk.Button(menu, text='Resize', command=lambda: resize(resize_entry))
-color_button = ttk.Button(menu, text='Change color of draw', command=change_color)
+color_button = ttk.Button(menu, text='Color of pen', command=change_color)
 rotate_button = ttk.Button(menu, text='Rotate', command=rotate)
 flip_horizontal_button = ttk.Button(menu, text='Flip Horizontal', command=flip_horizontal)
 flip_vertical_button = ttk.Button(menu, text='Flip Vertical', command=flip_vertical)
@@ -314,7 +309,7 @@ filter_combobox['state'] = 'readonly'
 filter_combobox.set('Select filter')
 filter_combobox.bind("<<ComboboxSelected>>", lambda event: choose_filter(filter_combobox.get()))
 
-size_text = ttk.Label(menu, text='Change size of pen')
+size_text = ttk.Label(menu, text='Size of pen')
 br_text = ttk.Label(menu, text='Brightness')
 ct_text = ttk.Label(menu, text='Contrast')
 sh_text = ttk.Label(menu, text='Sharpness')
@@ -328,37 +323,70 @@ sharpnessSlider.set(1)
 colorSlider.set(1)
 
 
-resize_entry.grid(row=0, column=0, padx=5, pady=10, sticky='nsew')
-resize_button.grid(row=0, column=1, padx=5, pady=10, sticky='nsew')
-color_button.grid(row=1, column=0, padx=5, pady=10, sticky='ns')
-size_text.grid(row=1, column=1, padx=5, pady=50)
-pensizeSlider.grid(row=1, column=2, padx=5, pady=10)
-rotate_button.grid(row=2, column=0, padx=5, pady=10)
-flip_horizontal_button.grid(row=2, column=1, padx=5, pady=10)
-flip_vertical_button.grid(row=2, column=2, padx=5, pady=10)
-filter_combobox.grid(row=3, column=0, padx=5, pady=10)
-apply_filter.grid(row=3, column=1, padx=5, pady=10)
-br_text.grid(row=4, column=0, padx=5, pady=10)
-brightnessSlider.grid(row=4, column=1, padx=5, pady=10)
-apply1_button.grid(row=4, column=2, padx=5, pady=10)
-default1_button.grid(row=4, column=3, padx=5, pady=10)
-ct_text.grid(row=5, column=0, padx=5, pady=10)
-contrastSlider.grid(row=5, column=1, padx=5, pady=10)
-apply2_button.grid(row=5, column=2, padx=5, pady=10)
-default2_button.grid(row=5, column=3, padx=5, pady=10)
-sh_text.grid(row=6, column=0, padx=5, pady=10)
-sharpnessSlider.grid(row=6, column=1, padx=5, pady=10)
-apply3_button.grid(row=6, column=2, padx=5, pady=10)
-default3_button.grid(row=6, column=3, padx=5, pady=10)
-cl_text.grid(row=7, column=0, padx=5, pady=10)
-colorSlider.grid(row=7, column=1, padx=5, pady=10)
-apply4_button.grid(row=7, column=2, padx=5, pady=10)
-default4_button.grid(row=7, column=3, padx=5, pady=10)
-changetheme_button.grid(row=8, column=0, padx=5, pady=10)
-clear_dr_button.grid(row=8, column=1, padx=5, pady=10)
-clear_all_button.grid(row=8, column=2, padx=5, pady=10)
+# resize_entry.grid(row=0, column=0, padx=5, pady=10, sticky='nsew')
+# resize_button.grid(row=0, column=1, padx=5, pady=10, sticky='nsew')
+# color_button.grid(row=1, column=0, padx=5, pady=10, sticky='ns')
+# size_text.grid(row=1, column=1, padx=5, pady=50)
+# pensizeSlider.grid(row=1, column=2, padx=5, pady=10)
+# rotate_button.grid(row=2, column=0, padx=5, pady=10)
+# flip_horizontal_button.grid(row=2, column=1, padx=5, pady=10)
+# flip_vertical_button.grid(row=2, column=2, padx=5, pady=10)
+# filter_combobox.grid(row=3, column=0, padx=5, pady=10)
+# apply_filter.grid(row=3, column=1, padx=5, pady=10)
+# br_text.grid(row=4, column=0, padx=5, pady=10)
+# brightnessSlider.grid(row=4, column=1, padx=5, pady=10)
+# apply1_button.grid(row=4, column=2, padx=5, pady=10)
+# default1_button.grid(row=4, column=3, padx=5, pady=10)
+# ct_text.grid(row=5, column=0, padx=5, pady=10)
+# contrastSlider.grid(row=5, column=1, padx=5, pady=10)
+# apply2_button.grid(row=5, column=2, padx=5, pady=10)
+# default2_button.grid(row=5, column=3, padx=5, pady=10)
+# sh_text.grid(row=6, column=0, padx=5, pady=10)
+# sharpnessSlider.grid(row=6, column=1, padx=5, pady=10)
+# apply3_button.grid(row=6, column=2, padx=5, pady=10)
+# default3_button.grid(row=6, column=3, padx=5, pady=10)
+# cl_text.grid(row=7, column=0, padx=5, pady=10)
+# colorSlider.grid(row=7, column=1, padx=5, pady=10)
+# apply4_button.grid(row=7, column=2, padx=5, pady=10)
+# default4_button.grid(row=7, column=3, padx=5, pady=10)
+# changetheme_button.grid(row=8, column=0, padx=5, pady=10)
+# clear_dr_button.grid(row=8, column=1, padx=5, pady=10)
+# clear_all_button.grid(row=8, column=2, padx=5, pady=10)
+#
+# edit_photo_frame.grid(row=9, column=0, sticky="S")
 
-edit_photo_frame.grid(row=9, column=0, sticky="S")
+
+resize_entry.place(x=30, y=10, width=245)
+resize_button.place(x=288, y=10)
+size_text.place(x=30, y=58)
+pensizeSlider.place(x=125, y=60, width=140)
+color_button.place(x=284, y=52)
+rotate_button.place(x=50, y=95)
+flip_horizontal_button.place(x=153, y=95)
+flip_vertical_button.place(x=270, y=95)
+filter_combobox.place(x=70, y=140)
+apply_filter.place(x=240, y=140)
+br_text.place(x=30, y=190)
+brightnessSlider.place(x=120, y=192)
+apply1_button.place(x=240, y=185, width=65)
+default1_button.place(x=315, y=185, width=65)
+ct_text.place(x=30, y=235)
+contrastSlider.place(x=120, y=237)
+apply2_button.place(x=240, y=230, width=65)
+default2_button.place(x=315, y=230, width=65)
+sh_text.place(x=30, y=280)
+sharpnessSlider.place(x=120, y=282)
+apply3_button.place(x=240, y=275, width=65)
+default3_button.place(x=315, y=275, width=65)
+cl_text.place(x=30, y=325)
+colorSlider.place(x=120, y=328)
+apply4_button.place(x=240, y=320, width=65)
+default4_button.place(x=315, y=320, width=65)
+changetheme_button.place(x=125, y=360)
+clear_dr_button.place(x=30, y=400, width=167)
+clear_all_button.place(x=212, y=400, width=167)
+# edit_photo_frame.place(x=420, y=500, relwidth=0.7, relheight=0.9)
+
 
 image = None
 #image = image.resize((700, 600))
@@ -372,7 +400,7 @@ original_image = image
 filter_combobox.bind("<<ComboboxSelected>>")
 
 resize_entry.bind("<FocusIn>", temp_text)
-#app.attributes('-fullscreen', True)
+# app.state('zoomed')
 app.resizable(False,False)
 app.config(menu=menubar)
 
