@@ -48,7 +48,7 @@ Najpierw stworzysz GUI wyświetlające zdjęcie ze statycznej ścieżki (np. 'Le
 7. nie zapomnij Labela wstawić w ramkę, samo stworzenie nie ustawia widżetów
 > label.pack()
 8. stwórz przycisk do zastosowania filtru na otworzonym zdjęciu
-> button1 = tkinter.Button(app, text= 'TEXT', command=pass)
+> button1 = tkinter.Button(app, text= 'TEXT', command=pass)<br />
 > button1.pack()
 > 
 **Plik md file zmienia cudzysłowie, więc zmień cudzysłów na ten ze swojej klawiatury**
