@@ -4,25 +4,25 @@ Poprzez manipulację macierzą sprawdź jak działają filtry. Spróbuj znaleź�
 Gotowy kod, na którym będziesz działać:
 >from PIL import Image, ImageFilter
 >
->#**Wczytanie obrazu**
->image = Image.open('13549827_web1_180914-CDT-booknotes.jpg')      # **w image path dodaj zdjęcie np. 'Lena.jpg'**
+>#**Wczytanie obrazu** <br />
+>image = Image.open(image_path)      # **zamiast image_path dodaj zdjęcie np. 'Lena.jpg', ktore masz w tym samym katalogu co projekt** <br />
 >
 >#**Definicja macierzy filtru**
->matrix = [
-    -2, -1, 0,                  # **przetestuj jak wartości macierzy wpływają na zdjęcie,**
-    -1, 1, 1,                   #  **dla najlepszego efektu suma elementów macierzy powinna byc równa około 0, dla niektórych**
-    0, 1, 2						# **filtrów również 1**
-]
+>matrix = [ <br />
+    -2, -1, 0,                  # **przetestuj jak wartości macierzy wpływają na zdjęcie,** <br />
+    -1, 1, 1,                   #  **dla najlepszego efektu suma elementów macierzy powinna byc równa około 0, dla niektórych** <br />
+    0, 1, 2						# **filtrów również 1** <br />
+] <br />
 >
->#**Tworzenie obiektu filtra na podstawie macierzy filtru**
->custom_filter = ImageFilter.Kernel((3, 3), matrix, scale=1)     # **jeśli obraz jest zbyt ciemny ustaw scale w przedziale od 0 do 1,**
-                                                                #**jesli zbyt jasny ustaw scale większe od 1**
+>#**Tworzenie obiektu filtra na podstawie macierzy filtru** <br />
+>custom_filter = ImageFilter.Kernel((3, 3), matrix, scale=1)     # **jeśli obraz jest zbyt ciemny ustaw scale w przedziale od 0 do 1,** <br />
+                                                                #**jesli zbyt jasny ustaw scale większe od 1** <br />
  >                                                               
->#**Zastosowanie filtra do obrazu**
->filtered_image = image.filter(custom_filter)
+>#**Zastosowanie filtra do obrazu** <br />
+>filtered_image = image.filter(custom_filter) <br />
 >
->#**Wyświetlenie obrazu przefiltrowanego**
->filtered_image.show()
+>#**Wyświetlenie obrazu przefiltrowanego** <br />
+>filtered_image.show() <br />
 
 **Plik md file zmienia cudzysłowie, więc tam gdzie otwierasz plik LENA.jpg zmień cudzysłów na ten ze swojej klawiatury**
 
@@ -59,7 +59,7 @@ Możesz spróbować zrobić to samemu, ale ze względu na małą ilość czasu r
 image = Image.open("LENA.jpg")
 >
 >def filter():  
->&nbsp;&nbsp;&nbsp;global image, imageTK
+>&nbsp;&nbsp;&nbsp;global image, imageTK <br />
 &nbsp;&nbsp;&nbsp;matrix = [  
 &nbsp;&nbsp;&nbsp;-2, -1, 0,  
 &nbsp;&nbsp;&nbsp;-1, 1, 1,  
@@ -69,7 +69,7 @@ image = Image.open("LENA.jpg")
 &nbsp;&nbsp;&nbsp;filtered_image = image.filter(custom_filter)  
 &nbsp;&nbsp;&nbsp;imageTK = ImageTk.PhotoImage(filtered_image)  #tutaj zamieniamy zdjęcie na format odpowiedni dla biblioteki tkinter (PIL -> tkinter)
 >
->&nbsp;&nbsp;&nbsp;label.configure(image=imageTK)  #ustawamy zdjęcie w Label
+>&nbsp;&nbsp;&nbsp;label.configure(image=imageTK)  #ustawiamy zdjęcie w Label <br />
 &nbsp;&nbsp;&nbsp;label.image = imageTK
 
 
