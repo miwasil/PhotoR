@@ -99,5 +99,5 @@ oraz już ci znanych:
 Otworzy nam to eksplorator plików, w którym będziemy mogli wybrać dowolne zdjęcie
 # Zadanie 3
 
-Uzupełniając kod stwórz własny filtr. Można to zrobić w różne sposoby- podane w kodzie. [Tutaj znajduje się kod do zadania 3](https://github.com/miwasil/Photo-editor/blob/main/zad3.py). W pliku zad3.py znajduje się też obszerniejszy opis, co wykonać. Na koniec dodaj przycisk aplikujący ten filtr do swojego GUI stworzonego w zadaniu 2.
+Uzupełniając kod stwórz własny filtr. Można to zrobić w różne sposoby- podane w kodzie. [Tutaj znajduje się kod do zadania 3](https://github.com/miwasil/Photo-editor/blob/main/zad3.py). Proponujemy stworzyć osoby plik z kodem z zadania 3 (i dopiero na koniec próbować łączyć to z wcześniej wykonaną pracą). W pliku zad3.py znajduje się też obszerniejszy opis, co wykonać. Na koniec dodaj przycisk aplikujący ten filtr do swojego GUI stworzonego w zadaniu 2.
 
