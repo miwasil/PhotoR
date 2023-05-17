@@ -33,7 +33,7 @@ i zastosujesz wcześniej stworzony filtr przyciskiem. Docelowy (przykładowy) wy
 ![image](https://github.com/miwasil/Photo-editor/assets/115273240/17636f93-2e1d-4306-a706-447613457c92)<br />
 
 ## Zadanie 2a
-Najpierw stworzysz GUI wyświetlające zdjęcie ze statycznej ścieżki (np. 'Lena.jpg') z przyciskiem, który zaaplikuje filtr. Rób wszystko w tym samym pliku co Zadanie 1.
+Najpierw stworzysz GUI wyświetlające zdjęcie ze statycznej ścieżki (np. 'Lena.jpg') z przyciskiem, który zaaplikuje filtr. Rób wszystko w tym samym pliku, co Zadanie 1.
 
 
 
