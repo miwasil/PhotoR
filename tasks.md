@@ -47,7 +47,7 @@ Najpierw stworzysz GUI wyświetlające zdjęcie ze statycznej ścieżki (np. 'Le
  >app.mainloop()
 6. w oknie utwórz Label, w którym będzie przechowywane zdjęcie
 > label = tkinter.Label(app, image=zmiennaprzechowujacazdjecie)
-7. nie zapomnij Labela wstawić w ramkę, samo stworzenie nie ustawia widżetów
+7. nie zapomnij Labela wstawić w okno, samo stworzenie nie ustawia widżetów
 > label.pack()
 8. stwórz przycisk do zastosowania filtru na otworzonym zdjęciu
 > button1 = tkinter.Button(app, text= 'TEXT', command=pass)<br />
