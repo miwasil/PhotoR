@@ -1,4 +1,4 @@
-Po zrobieniu każdego zadania umieść na UPELu zrzut ekranu kodu oraz efektu, jaki on daje. Zalecamy  robić Zadanie 1 na obrazie 'Lena.jpg', który można pobrać z repozytorium.
+Po zrobieniu każdego zadania umieść na UPELu zrzut ekranu kodu oraz efektu, jaki on daje. Zalecamy  robić Zadanie 1 na obrazie 'Lena.jpg', który można [pobrać](https://github.com/miwasil/Photo-editor/blob/main/LENA.jpg) z repozytorium.
 # Zadanie 1
 Poprzez manipulację macierzą sprawdź jak działają filtry. Spróbuj znaleźć jakiś ciekawy efekt.
 Gotowy kod, na którym będziesz działać:
