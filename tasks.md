@@ -7,7 +7,7 @@ Gotowy kod, na którym będziesz działać:
 >#**Wczytanie obrazu** <br />
 >image = Image.open(image_path)      # **zamiast image_path dodaj zdjęcie np. 'Lena.jpg', ktore masz w tym samym katalogu co projekt** <br />
 >
->#**Definicja macierzy filtru**
+>#**Definicja macierzy filtru**<br />
 >matrix = [ <br />
     -2, -1, 0,                  # **przetestuj jak wartości macierzy wpływają na zdjęcie,** <br />
     -1, 1, 1,                   #  **dla najlepszego efektu suma elementów macierzy powinna byc równa około 0, dla niektórych** <br />
