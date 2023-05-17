@@ -53,7 +53,7 @@ Najpierw stworzysz GUI wyświetlające zdjęcie ze statycznej ścieżki (np. 'Le
 > 
 **Plik md file zmienia cudzysłowie, więc zmień cudzysłów na ten ze swojej klawiatury**
 
-9. w miejscu pass użyjemy funkcji filtrującej- akcja po naciśnięciu przycisku. Z tego powodu filtr stworzony w Zadaniu 1 zamień na funkcję
+9. w miejscu pass użyjemy funkcji filtrującej- akcja po naciśnięciu przycisku. Z tego powodu filtr stworzony w Zadaniu 1 zamień na funkcję.
 Możesz spróbować zrobić to samemu, ale ze względu na małą ilość czasu radzimy- skopiuj kod poniższy kod, który zawiera moją propozycję zmiany kodu Zad 1 na funkcję. Wprowadź zmiany w filtrze w niej zawartym analogiczne do tych jakich dokonałeś w Zad 1. Jednocześnie kod z zadania 1 musisz usunąć (z pominięciem importowanych bibliotek). **Plik md file zmienia cudzysłowie, więc tam gdzie otwierasz plik LENA.jpg zmień cudzysłów na ten ze swojej klawiatury**
 >imageTK = None  
 image = Image.open("LENA.jpg")
