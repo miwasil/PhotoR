@@ -8,7 +8,7 @@ Authors: <br />
 
 ## About
 Image operations are performed on built-in functions from PIL. We created also our own functions e.g. max_colors(). Images are displayed in tkinter Label, but if we draw on it, it is converted to Canvas (you can find more info below). <br /> <br />
-Check our tasks in [tasks.md file](https://github.com/miwasil/Photo-editor/blob/main/tasks.md)!
+Check our tasks in [tasks.md](https://github.com/miwasil/Photo-editor/blob/main/tasks.md) file!
 
 ![image](https://github.com/miwasil/Photo-editor/assets/115273240/8e11cef9-e808-48fd-b975-1a573d436d9d)
 
