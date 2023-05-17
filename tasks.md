@@ -93,7 +93,7 @@ oraz już ci znanych:
 >image = Image.open(image_path)<br />
 >imageTK = ImageTk.PhotoImage(image)<br />
 >label.configure(image=imageTK)
-3. zmienne imageTK, image_path, image ustaw jako globalne w ciele funkcji
+3. zmienne imageTK, image ustaw jako globalne w ciele funkcji
 
  
 Otworzy nam to eksplorator plików, w którym będziemy mogli wybrać dowolne zdjęcie
