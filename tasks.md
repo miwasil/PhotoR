@@ -88,8 +88,8 @@ Możesz przejść do dodania przycisku z opcją otwierania wybranego zdjęcia z 
 >image_path = filedialog.askopenfilename()
 
 oraz już ci znanych:
->image = Image.open(image_path)
->imageTK = ImageTk.PhotoImage(image)
+>image = Image.open(image_path)<br />
+>imageTK = ImageTk.PhotoImage(image)<br />
 >label.configure(image=imageTK)
 3. zmienne imageTK, image_path, image ustaw jako globalne w ciele funkcji
 
