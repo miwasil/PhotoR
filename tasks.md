@@ -40,7 +40,7 @@ Najpierw stworzysz GUI wyświetlające zdjęcie ze statycznej ścieżki (np. 'Le
 **Kroki:**
 1. zaimportuj bibliotekę tkinter
 2. Zakomentuj linijkę, która wyrzuca zdjęcie na ekran, aby na ekranie pojawiało ci się nowo stworzone GUI
->  filtered_image.show()
+>  #filtered_image.show()
 4. stwórz okno aplikacji
 > app = tkinter.Tk()
 5. uruchom swoje GUI dodając na końcu kodu
